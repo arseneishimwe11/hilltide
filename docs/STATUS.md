@@ -1,6 +1,6 @@
 # Hilltide: status
 
-Last updated: 2026-11-15, end of Phase 0.
+Last updated: 2026-11-15, during Phase 1.
 
 A new session can resume from `CLAUDE.md`, `docs/PROJECT_BRIEF.md` and this
 file. Decisions are in `docs/DECISIONS.md`, licenses in `docs/LICENSES.md`.
@@ -10,7 +10,7 @@ file. Decisions are in `docs/DECISIONS.md`, licenses in `docs/LICENSES.md`.
 | Phase | State |
 |---|---|
 | 0 Foundations | Done |
-| 1 Data pipeline | Next (plan below) |
+| 1 Data pipeline | In progress (see "Phase 1 progress") |
 | 2 The Land | Not started |
 | 3 Kigali Builds Itself | Not started |
 | 4 Make It Rain | Not started |
@@ -47,7 +47,7 @@ Things only the owner can do. None of them block Phase 1.
 | CPU | 4 cores |
 | RAM | 15 GB |
 | Disk free | 31 GB |
-| GPU | None. All browser tests use software rendering. |
+| GPU | None. Headless Chromium renders in software (SwiftShader). Both WebGL2 (with float render targets) and WebGPU (adapter, device and compute limits) work with the flags `--enable-unsafe-webgpu --use-webgpu-adapter=swiftshader --enable-unsafe-swiftshader --use-angle=swiftshader --ignore-gpu-blocklist`. Without the flags WebGPU returns no adapter. So both simulation paths can be tested here, slowly. |
 | Tools | Node 22.23, npm 10.9, Python 3.13, uv 0.11, ffmpeg 6.1. No GDAL (rasterio wheels bundle it). |
 | Browser | Chromium for Playwright 1.63.0, pre-installed |
 | Network | Unrestricted, through a proxy |
@@ -99,7 +99,49 @@ connection. Use `download.openstreetmap.fr/extracts/africa/rwanda-latest.osm.pbf
 - lightningcss (MPL-2.0) comes in through Vite as a build tool. It is not
   shipped in the site. Recorded as a flag in `docs/LICENSES.md`.
 
+## Phase 1 progress
+
+Done and committed:
+- Local grid, asset container (`HLT1`), codecs, manifest, resumable downloads.
+- Terrain at three levels: country 250 m (1.05 MB), region 90 m (0.83 MB),
+  Kigali 30 m, 1280 x 1280 (1.36 MB). No voids.
+- OpenStreetMap: country rivers (661 lines, 3,744 km), Kigali waterways
+  (713 lines, 1,002 km), Rwanda border, City of Kigali boundary (738 km2),
+  place names (134 country, 18 Kigali).
+- Land cover (ESA WorldCover) on all three grids, 0.81 MB together.
+- Building method (`buildings.py`, decision 19) and the `buildings` step,
+  with tests. Flow accumulation (`flow.py`) for the later validation.
+- Browser-side readers for every asset kind (`web/src/data/`), tested
+  against the committed assets. Solar position module (`web/src/sky/sun.ts`).
+
+Measured so far:
+- 22,106,220 published footprints read (equals Google's published count for
+  the file); 1,042,434 on the Kigali grid; 945,002 at confidence >= 0.683.
+- The rasters' own figures for the grid, by year (area with presence >= 0.5,
+  and the sum of fractional building counts):
+  2016 29.9 km2 / 736,738; 2017 33.6 / 745,161; 2018 37.4 / 820,796;
+  2019 38.3 / 853,467; 2020 39.2 / 859,833; 2023 46.7 / 1,032,473.
+- Year-to-year noise of a footprint's presence: standard deviation 0.12.
+
+In progress:
+- Fetching the 4 m building rasters for 2021 and 2022 (about 2 minutes per
+  year; cached under `data/raw/temporal/`, mosaics under `data/work/temporal/`).
+
+Next, in order:
+1. Run `uv run hilltide-pipeline buildings verify` (in `pipeline/`). It needs
+   all eight yearly mosaics; missing ones are fetched automatically.
+2. Check `web/public/data/buildings/stats.json` against the raster figures
+   above, look at a rendering of first-year by building, and add a web test
+   that decodes a real building tile.
+3. Run the full `make assets` once from the cache to confirm one command
+   rebuilds everything, then write the Phase 1 report here with final sizes.
+
 ## Phase 1 plan: data pipeline
+
+Note: written before the work started. Where it differs from what was built
+(Kigali grid size, lakes from land cover, the dating rule, no Natural Earth),
+`docs/DECISIONS.md` entries 13 to 21 are the record.
+
 
 Goal: one command (`make assets`) that turns open source data into compact,
 versioned web assets under `web/public/data/`, with a manifest and tests.
