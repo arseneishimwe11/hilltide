@@ -25,9 +25,10 @@ Things only the owner can do. None of them block Phase 1.
 
 1. **Enable GitHub Pages.** Repository Settings > Pages > Build and
    deployment > Source: choose "GitHub Actions". Until then the Deploy
-   workflow fails at its "configure-pages" step. After enabling, re-run the
-   Deploy workflow from the Actions tab (or it runs on the next push). The
-   repo is public, so Pages is free. Expected address:
+   workflow builds the site, shows a "Not deployed" warning and skips
+   publishing. After enabling, re-run the Deploy workflow from the Actions
+   tab (or it runs on the next push). The repo is public, so Pages is free.
+   Expected address:
    `https://arseneishimwe11.github.io/hilltide/`.
 2. **Choose a license for Hilltide's own code** (for example MIT). Until
    chosen there is no LICENSE file, which means all rights reserved.
@@ -83,15 +84,16 @@ connection. Use `download.openstreetmap.fr/extracts/africa/rwanda-latest.osm.pbf
 | Pipeline tests | 4 passing |
 | Browser tests | 4 passing (desktop and phone viewport) |
 | Built site | 4 files, 7.5 kB total (JS 4.1 kB, CSS 1.7 kB) |
-| CI run 1 | Success, 38 seconds |
-| Deploy run 1 | Failed, as expected (see below) |
+| CI runs 1 and 2 | Success, 38 and 35 seconds |
+| Deploy runs 1 and 2 | Failed, as expected (see below) |
 
 ### What failed
 - The first deploy. Exact error from the run:
   "Get Pages site failed. Please verify that the repository has Pages enabled
   and configured to build using GitHub Actions". The build and size steps
   before it passed. This is item 1 under "Needs owner"; the workflow token
-  cannot enable Pages itself.
+  cannot enable Pages itself. The workflow now detects this case and skips
+  publishing with a warning instead of failing every push.
 
 ### Notes
 - lightningcss (MPL-2.0) comes in through Vite as a build tool. It is not
