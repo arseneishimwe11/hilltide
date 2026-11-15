@@ -10,10 +10,18 @@ Sentinel-2, 2016 to 2023). This module joins the two:
    weight (the publisher says height is only meaningful where presence is
    high). Footprints too small to cover a cell centre are sampled at their
    centroid instead.
-3. A footprint's first year is the earliest year from which it is present
+3. Small buildings are blurred in the Sentinel-2 based rasters: a 40 m2 house
+   never reaches the presence of a warehouse. So each footprint is judged
+   against its own final level (`relative_presence`): it counts as present
+   in a year when its presence is at least half of what it is at the end of
+   the record. Comparing 2016 with 2023 this way splits Kigali's footprints
+   into two clear groups, one near 0 (built since) and one near 1 (already
+   there), with few in between.
+4. A footprint's first year is the earliest year from which it is present
    and stays present in at least three quarters of the years that follow
-   (see `first_year_index`). Footprints that never qualify are left out
-   and counted.
+   (`first_year_index`).
+5. Footprints the rasters barely see at the end of the record cannot be
+   dated. They are left out and counted.
 """
 
 from __future__ import annotations
@@ -29,10 +37,14 @@ from scipy import ndimage
 
 from .grid import Grid
 
-#: A footprint counts as present in a year when its mean presence reaches this.
+#: A footprint counts as present in a year when its presence reaches this share
+#: of its own final level.
 PRESENCE_THRESHOLD = 0.5
 #: From its first year on, a building must be present in at least this share of years.
 MIN_PRESENT_SHARE = 0.75
+#: Final presence below this is too close to the rasters' year-to-year noise
+#: (standard deviation about 0.12) to date a building from.
+MIN_FINAL_PRESENCE = 0.2
 #: Heights are clamped to this range in metres. The publisher caps heights at 100 m.
 MIN_HEIGHT, MAX_HEIGHT = 2.5, 100.0
 
@@ -105,6 +117,26 @@ def measure_year(
     return mean_presence, mean_height
 
 
+def relative_presence(
+    presence: np.ndarray, min_final: float = MIN_FINAL_PRESENCE
+) -> tuple[np.ndarray, np.ndarray]:
+    """Presence of each building as a share of its own final level.
+
+    `presence` is (n, years). The final level is the larger of the last two
+    years, so a building finished in the last year is measured against that
+    year, and one noisy final year does not lower the bar for the rest.
+
+    Returns (relative presence, datable). Where the final level is below
+    `min_final` the building cannot be dated: its row is all zeros and
+    `datable` is False.
+    """
+    final = presence[:, -2:].max(axis=1)
+    datable = final >= min_final
+    relative = np.zeros_like(presence, dtype=np.float64)
+    relative[datable] = presence[datable] / final[datable, None]
+    return relative, datable
+
+
 def first_year_index(
     presence: np.ndarray,
     threshold: float = PRESENCE_THRESHOLD,
@@ -112,8 +144,9 @@ def first_year_index(
 ) -> np.ndarray:
     """Index of the first year each building is there to stay; -1 if never.
 
-    `presence` is (n, years). A building's first year is the earliest year in
-    which it is present (presence >= threshold) and it is also present in at
+    `presence` is (n, years), normally the output of `relative_presence`. A
+    building's first year is the earliest year in which it is present
+    (presence >= threshold) and it is also present in at
     least `min_share` of the years from then to the end of the record. The
     share rule ignores a single-year dropout (cloud, misalignment) in a long
     run, and rejects an isolated early detection followed by years of absence.
@@ -153,3 +186,125 @@ def settle_heights(height: np.ndarray, first: np.ndarray) -> np.ndarray:
         smooth = np.nanmedian(stack, axis=0)
     smooth = np.clip(np.nan_to_num(smooth, nan=0.0), MIN_HEIGHT, MAX_HEIGHT)
     return np.where(exists, smooth, 0.0)
+
+
+# --- Packing ------------------------------------------------------------------
+
+KIND = "buildings"
+VERSION = 1
+#: Side of one building tile in metres.
+TILE_SIZE = 3840.0
+#: Positions and sizes are stored in units of this many metres.
+LENGTH_UNIT = 0.1
+#: Heights are stored in units of this many metres.
+HEIGHT_UNIT = 0.5
+
+
+@dataclass
+class BuildingTable:
+    """One row per building, ready to pack."""
+
+    x: np.ndarray  # centre, local metres
+    y: np.ndarray
+    length: np.ndarray  # long side, m
+    width: np.ndarray  # short side, m
+    angle: np.ndarray  # radians in [0, pi)
+    first: np.ndarray  # index of the first year (0 = first year of the record)
+    height: np.ndarray  # (n, years), metres, zero before the first year
+    area: np.ndarray  # footprint area, m2
+
+    def __len__(self) -> int:
+        return len(self.x)
+
+    def rows(self, keep: np.ndarray) -> BuildingTable:
+        return BuildingTable(
+            self.x[keep],
+            self.y[keep],
+            self.length[keep],
+            self.width[keep],
+            self.angle[keep],
+            self.first[keep],
+            self.height[keep],
+            self.area[keep],
+        )
+
+
+def tile_index(table: BuildingTable, grid: Grid) -> tuple[np.ndarray, np.ndarray]:
+    """Tile (column, row) of each building. Row 0 is the southern row."""
+    col = np.floor((table.x - grid.x_min) / TILE_SIZE).astype(int)
+    row = np.floor((table.y - grid.y_min) / TILE_SIZE).astype(int)
+    return col, row
+
+
+def pack_tile(table: BuildingTable, origin: tuple[float, float], years: list[int]):
+    """Pack the buildings of one tile, largest footprint first.
+
+    Sorting by area lets the site draw only the first N buildings of a tile
+    as a cheap level of detail: the biggest ones are always included.
+    """
+    from .container import Container
+
+    order = np.argsort(-table.area, kind="stable")
+    part = table.rows(order)
+
+    def units(values: np.ndarray, unit: float, limit: int) -> np.ndarray:
+        return np.clip(np.rint(values / unit), 0, limit)
+
+    container = Container(
+        KIND,
+        VERSION,
+        {
+            "origin": [origin[0], origin[1]],
+            "tileSize": TILE_SIZE,
+            "count": len(part),
+            "years": years,
+            "lengthUnit": LENGTH_UNIT,
+            "heightUnit": HEIGHT_UNIT,
+            "angleSteps": 256,
+            "order": "footprint area, largest first",
+        },
+    )
+    container.add("x", units(part.x - origin[0], LENGTH_UNIT, 65535).astype(np.uint16))
+    container.add("y", units(part.y - origin[1], LENGTH_UNIT, 65535).astype(np.uint16))
+    container.add("length", units(part.length, LENGTH_UNIT, 65535).astype(np.uint16))
+    container.add("width", units(part.width, LENGTH_UNIT, 65535).astype(np.uint16))
+    container.add("angle", (np.rint(part.angle / np.pi * 256) % 256).astype(np.uint8))
+    container.add("first", part.first.astype(np.uint8))
+    # One row of year heights per building, rows back to back.
+    container.add("height", units(part.height, HEIGHT_UNIT, 255).astype(np.uint8).ravel())
+    return container
+
+
+def unpack_tile(container) -> BuildingTable:
+    meta = container.meta
+    count, years = meta["count"], len(meta["years"])
+
+    def metres(name: str) -> np.ndarray:
+        return container.section(name).data.astype(np.float64) * meta["lengthUnit"]
+
+    length, width = metres("length"), metres("width")
+    return BuildingTable(
+        x=metres("x") + meta["origin"][0],
+        y=metres("y") + meta["origin"][1],
+        length=length,
+        width=width,
+        angle=container.section("angle").data.astype(np.float64) / meta["angleSteps"] * np.pi,
+        first=container.section("first").data.astype(np.int64),
+        height=container.section("height").data.reshape(count, years) * meta["heightUnit"],
+        area=length * width,
+    )
+
+
+def yearly_totals(first: np.ndarray, area: np.ndarray, years: list[int]) -> list[dict]:
+    """Buildings standing and their total footprint area, for each year."""
+    totals = []
+    for index, year in enumerate(years):
+        standing = (first >= 0) & (first <= index)
+        totals.append(
+            {
+                "year": year,
+                "buildings": int(standing.sum()),
+                "footprintKm2": round(float(area[standing].sum()) / 1e6, 3),
+            }
+        )
+    return totals

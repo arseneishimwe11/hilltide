@@ -5,11 +5,15 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 
+import numpy as np
+import shapely
 from rasterio.enums import Resampling
+from rasterio.features import rasterize
+from rasterio.transform import Affine
 
-from . import landcover, osm, terrain
+from . import buildings, footprints, landcover, osm, temporal, terrain
 from .download import SourceLog, fetch
-from .grid import COUNTRY, KIGALI, REGION
+from .grid import COUNTRY, KIGALI, KIGALI_4M, REGION
 from .heights import KIND as HEIGHTS_KIND
 from .heights import VERSION as HEIGHTS_VERSION
 from .heights import pack_heights
@@ -205,8 +209,197 @@ def build_landcover(paths: Paths, say: Log = print) -> list[AssetRecord]:
     return records
 
 
+def _kigali_footprints(paths: Paths, log: SourceLog, say: Log) -> footprints.Footprints:
+    """Footprints on the Kigali grid, filtered once from the published file."""
+    extent = f"{KIGALI.x_min:.0f}_{KIGALI.y_max:.0f}_{KIGALI.width}x{KIGALI.height}"
+    filtered = paths.work / "footprints" / f"kigali_{extent}.csv.gz"
+    if not filtered.is_file():
+        say("buildings: fetching the published footprint file (2.1 GB) and filtering it")
+        published = fetch(
+            footprints.FOOTPRINTS_URL, "footprints/19d_buildings.csv.gz", paths.raw, log
+        )
+        read, kept = footprints.filter_to_box(
+            published, filtered, KIGALI.lonlat_bounds(margin_deg=0.001)
+        )
+        say(f"buildings: {read} published footprints read, {kept} near Kigali")
+    return footprints.load_footprints(filtered, KIGALI)
+
+
+def build_buildings(paths: Paths, say: Log = print) -> list[AssetRecord]:
+    """Building tiles and yearly statistics. See buildings.py for the method."""
+    log = SourceLog(paths.raw)
+    years = list(temporal.YEARS)
+    everything = _kigali_footprints(paths, log, say)
+    by_confidence = {
+        name: int((everything.confidence >= threshold).sum())
+        for name, threshold in footprints.PUBLISHED_THRESHOLDS.items()
+    }
+    prints = everything.subset(everything.confidence >= footprints.MIN_CONFIDENCE)
+    count = len(prints)
+    say(f"buildings: {len(everything)} footprints on the grid, {count} at confidence >= "
+        f"{footprints.MIN_CONFIDENCE}")  # fmt: skip
+
+    labels = buildings.burn_labels(prints.polygons, KIGALI_4M)
+    cells = np.bincount(labels.ravel(), minlength=count + 1)[1:]
+    centroid = shapely.centroid(prints.polygons)
+    x, y = shapely.get_x(centroid), shapely.get_y(centroid)
+
+    extract = osm.read_extract(fetch(OSM_EXTRACT_URL, "osm/rwanda-latest.osm.pbf", paths.raw, log))
+    if extract.city is None:
+        raise RuntimeError("The OSM extract has no City of Kigali boundary")
+    in_city = shapely.contains_xy(extract.city, x, y)
+    city_cells = rasterize(
+        [(extract.city, 1)],
+        out_shape=KIGALI_4M.shape,
+        transform=Affine(*KIGALI_4M.affine),
+        fill=0,
+        dtype="uint8",
+    ).astype(bool)
+    cell_km2 = KIGALI_4M.cell**2 / 1e6
+    # The published rasters are 0.5 m; the 4 m overview averages 64 of those pixels.
+    count_scale = (KIGALI_4M.cell / 0.5) ** 2
+
+    presence = np.zeros((count, len(years)))
+    height = np.zeros((count, len(years)))
+    raster_rows = []
+    for index, year in enumerate(years):
+        rasters = temporal.load_year(year, KIGALI_4M, paths.raw, paths.work, log)
+        presence[:, index], height[:, index] = buildings.measure_year(
+            labels, cells, KIGALI_4M, x, y, rasters.presence, rasters.height
+        )
+        built = rasters.presence >= 0.5
+        raster_rows.append(
+            {
+                "year": year,
+                "builtKm2": round(float(built.sum()) * cell_km2, 3),
+                "builtKm2City": round(float((built & city_cells).sum()) * cell_km2, 3),
+                "countEstimate": round(float(np.nansum(rasters.count)) * count_scale),
+                "countEstimateCity": round(
+                    float(np.nansum(rasters.count[city_cells])) * count_scale
+                ),
+            }
+        )
+        say(f"buildings: measured {year}")
+        del rasters, built
+
+    relative, datable = buildings.relative_presence(presence)
+    first = buildings.first_year_index(relative)
+    kept = first >= 0
+    settled = buildings.settle_heights(height, first)
+    rectangles = footprints.oriented_rectangles(prints.polygons)
+    table = buildings.BuildingTable(
+        rectangles.x, rectangles.y, rectangles.length, rectangles.width, rectangles.angle,
+        first, settled, shapely.area(prints.polygons),
+    ).rows(kept)  # fmt: skip
+    say(f"buildings: {int(kept.sum())} dated, {int((~datable).sum())} too faint to date, "
+        f"{int((datable & ~kept).sum())} not steadily present")  # fmt: skip
+
+    records = []
+    col, row = buildings.tile_index(table, KIGALI)
+    tiles_across = round(KIGALI.width * KIGALI.cell / buildings.TILE_SIZE)
+    tile_list = []
+    for tile_row in range(tiles_across):
+        for tile_col in range(tiles_across):
+            members = (col == tile_col) & (row == tile_row)
+            if not members.any():
+                continue
+            origin = (
+                KIGALI.x_min + tile_col * buildings.TILE_SIZE,
+                KIGALI.y_min + tile_row * buildings.TILE_SIZE,
+            )
+            part = table.rows(members)
+            container = buildings.pack_tile(part, origin, years)
+            relative_path = f"buildings/tile_{tile_col}_{tile_row}.hlt"
+            container.write(paths.web_data / relative_path)
+            info = {
+                "col": tile_col,
+                "row": tile_row,
+                "origin": list(origin),
+                "count": len(part),
+                "countByFirstYear": np.bincount(part.first, minlength=len(years)).tolist(),
+                "maxHeight": round(float(part.height.max()), 1),
+            }
+            tile_list.append(info)
+            records.append(
+                AssetRecord(
+                    key=f"buildings.tile.{tile_col}.{tile_row}",
+                    path=relative_path,
+                    kind=buildings.KIND,
+                    version=buildings.VERSION,
+                    sources=["open-buildings", "open-buildings-temporal"],
+                    info=info,
+                )
+            )
+
+    city_table_first = first[kept & in_city]
+    city_table_area = table.area[in_city[kept]]
+    stats = {
+        "years": years,
+        "method": {
+            "footprints": "Open Buildings v3",
+            "minConfidence": footprints.MIN_CONFIDENCE,
+            "presenceThreshold": buildings.PRESENCE_THRESHOLD,
+            "presenceRelativeTo": "the larger of the footprint's presence in the last two years",
+            "minFinalPresence": buildings.MIN_FINAL_PRESENCE,
+            "minPresentShare": buildings.MIN_PRESENT_SHARE,
+            "heights": "presence-weighted mean inside the footprint, median of 3 years",
+        },
+        "footprints": {
+            "onGrid": len(everything),
+            "byPublishedPrecision": by_confidence,
+            "used": count,
+            "dated": int(kept.sum()),
+            "tooFaintToDate": int((~datable).sum()),
+            "notSteadilyPresent": int((datable & ~kept).sum()),
+        },
+        "grid": {
+            "areaKm2": round(KIGALI.width * KIGALI.height * KIGALI.cell**2 / 1e6, 1),
+            "byYear": buildings.yearly_totals(table.first, table.area, years),
+        },
+        "city": {
+            "name": "City of Kigali",
+            "areaKm2": round(extract.city.area / 1e6, 1),
+            "byYear": buildings.yearly_totals(city_table_first, city_table_area, years),
+        },
+        "rasters": {
+            "note": (
+                "Computed from the 2.5D Temporal rasters alone, without footprints: area "
+                "with presence of at least 0.5, and the sum of fractional building counts."
+            ),
+            "byYear": raster_rows,
+        },
+        "tiles": {"size": buildings.TILE_SIZE, "across": tiles_across, "list": tile_list},
+    }
+    stats_path = paths.web_data / "buildings" / "stats.json"
+    stats_path.write_text(json.dumps(stats, separators=(",", ":")) + "\n")
+    records.append(
+        AssetRecord(
+            key="buildings.stats",
+            path="buildings/stats.json",
+            kind="building-stats",
+            version=1,
+            sources=["open-buildings", "open-buildings-temporal", "openstreetmap"],
+            info={"buildings": int(kept.sum()), "tiles": len(tile_list)},
+        )
+    )
+    for stale in (paths.web_data / "buildings").glob("tile_*.hlt"):
+        if f"buildings/{stale.name}" not in {record.path for record in records}:
+            stale.unlink()
+    update_manifest(
+        paths.manifest,
+        records,
+        {key: SOURCES[key] for key in ("open-buildings", "open-buildings-temporal")},
+        remove_prefix="buildings.",
+    )
+    grid_rows = stats["grid"]["byYear"]
+    say(f"buildings: {len(tile_list)} tiles; {grid_rows[0]['buildings']} standing in "
+        f"{years[0]}, {grid_rows[-1]['buildings']} in {years[-1]}")  # fmt: skip
+    return records
+
+
 STEPS: dict[str, Callable[[Paths, Log], list[AssetRecord]]] = {
     "terrain": build_terrain,
     "osm": build_osm,
     "landcover": build_landcover,
+    "buildings": build_buildings,
 }

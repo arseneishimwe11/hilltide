@@ -10,14 +10,14 @@ from __future__ import annotations
 SOURCES: dict[str, dict] = {
     "copernicus-dem": {
         "name": "Copernicus DEM GLO-30 and GLO-90",
-        "publisher": "European Space Agency, Airbus",
-        "license": "Copernicus DEM licence (free use, credit required)",
-        "licenseUrl": "https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf",
-        "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+        "publisher": "European Space Agency, DLR, Airbus Defence and Space",
+        "license": "Copernicus DEM free licence (credit required)",
+        "licenseUrl": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+        "url": "https://registry.opendata.aws/copernicus-dem/",
         "attribution": (
-            "Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus "
-            "Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European "
-            "Union and ESA; all rights reserved."
+            "Produced using Copernicus WorldDEM-30 and WorldDEM-90 "
+            "\u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 "
+            "provided under COPERNICUS by the European Union and ESA; all rights reserved."
         ),
     },
     "open-buildings": {
@@ -53,7 +53,9 @@ SOURCES: dict[str, dict] = {
         "license": "ODbL 1.0 (share-alike for derived databases)",
         "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
         "url": "https://www.openstreetmap.org/copyright",
-        "attribution": "(c) OpenStreetMap contributors, available under the Open Database License.",
+        "attribution": (
+            "\u00a9 OpenStreetMap contributors, available under the Open Database License."
+        ),
     },
     "esa-worldcover": {
         "name": "ESA WorldCover 10 m 2021 v200 (land cover)",
@@ -62,7 +64,7 @@ SOURCES: dict[str, dict] = {
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
         "url": "https://esa-worldcover.org/en/data-access",
         "attribution": (
-            "(c) ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data "
+            "\u00a9 ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data "
             "(2021) processed by ESA WorldCover consortium."
         ),
     },

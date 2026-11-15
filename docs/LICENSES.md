@@ -14,8 +14,9 @@ Terms that need attention before relying on them.
 | Item | Term | What it means for Hilltide | Status |
 |---|---|---|---|
 | lightningcss (and platform builds) | MPL-2.0, weak copyleft per file | Build tool pulled in by Vite. Not shipped in the site, not modified. No obligation on our code. | Accepted, build-time only |
-| OpenStreetMap data | ODbL 1.0, share-alike for derived databases | Packed river, lake and label files derived from OSM must be offered under ODbL with attribution. The rendered scene is a "produced work" and only needs attribution. | Planned for Phase 1; to verify against the license text then |
-| Copernicus DEM | Own license (not Creative Commons) | Free use including commercial, with a mandatory credit line. | Planned for Phase 1; to verify against the license text then |
+| OpenStreetMap data | ODbL 1.0, share-alike for derived databases | Packed river, border and label files derived from OSM are offered under ODbL with attribution. The rendered scene is a "produced work" and only needs attribution. | In use |
+| Copernicus DEM | Own licence (not Creative Commons) | Free for the general public with a mandatory credit line. Commercial-use terms not yet confirmed (see Datasets notes). | In use |
+| GEOS (inside shapely wheels) | LGPL-2.1 | Pipeline only, dynamically linked, unmodified. Not shipped in the site. | Accepted, build-time only |
 | pysheds, richdem | GPL-3.0 | Not used. Flow accumulation is written in-house instead. | Avoided |
 
 ## Web app: direct dependencies (all development or build time)
@@ -63,19 +64,49 @@ virtual environment.
 | packaging | 26.3 | Apache-2.0 OR BSD-2-Clause |
 | pygments | 2.21.0 | BSD-2-Clause |
 
-## Datasets (planned, not yet downloaded)
+## Datasets
 
-Each is verified against its license text when first downloaded, and its
-required attribution is added to the site's credits.
+Each license was read from the publisher's own page on 2026-11-15. The
+credit text is stored in `pipeline/src/hilltide_pipeline/sources.py`, copied
+into `web/public/data/manifest.json`, and shown in the site's credits.
 
-| Dataset | Use | Expected license | Verified |
+| Dataset | Use | License | Where it was verified |
 |---|---|---|---|
-| Copernicus DEM GLO-30 and GLO-90 | Terrain | Copernicus DEM license, credit required | Not yet (Phase 1) |
-| Google Open Buildings v3 footprints | Building shapes | CC BY 4.0 (also offered under ODbL) | Not yet (Phase 1) |
-| Google Open Buildings 2.5D Temporal | First year and height per year | CC BY 4.0 | Not yet (Phase 1) |
-| OpenStreetMap (Rwanda extract) | Rivers, lakes, place labels | ODbL 1.0 | Not yet (Phase 1) |
-| Natural Earth | Country border | Public domain | Not yet (Phase 1) |
-| ESA WorldCover | Land tint, infiltration classes | CC BY 4.0 | Not yet (Phase 1) |
+| Copernicus DEM GLO-30 and GLO-90 | Terrain | Copernicus DEM free licence, credit required | Copernicus Data Space COP-DEM page, "User Obligations" (credit text quoted from there); AWS registry page for free public access |
+| Google Open Buildings v3 | Building footprints | CC BY 4.0 or ODbL 1.0, user's choice. Used under CC BY 4.0. | sites.research.google/gr/open-buildings, "How is the data licensed?" |
+| Google Open Buildings 2.5D Temporal | First year and height per year | CC BY 4.0 or ODbL 1.0, user's choice. Used under CC BY 4.0. | sites.research.google/gr/open-buildings/temporal, "How is the data licensed?" |
+| OpenStreetMap, Rwanda extract (openstreetmap.fr) | Rivers, borders, place names | ODbL 1.0 | openstreetmap.org/copyright |
+| ESA WorldCover 10 m 2021 v200 | Lakes, terrain tint, infiltration classes | CC BY 4.0 | esa-worldcover.org/en/data-access, "License" (credit text quoted from there) |
+
+Notes:
+- Copernicus DEM: the Data Space page states the data is "available
+  worldwide with a free license" and that the general public may download
+  GLO-30 and GLO-90. That page does not mention commercial use either way.
+  The full licence PDF it links could not be opened from the sandbox, so the
+  commercial-use terms are not yet confirmed. Hilltide is non-commercial
+  today; confirm before any commercial product is built on it.
+- OpenStreetMap: the packed files under `web/public/data/water/`,
+  `border/` and `labels/` are derived databases and are offered under
+  ODbL 1.0. The rendered scene only needs the credit line.
+- Google's building heights were evaluated only in North America, Europe and
+  Japan (mean absolute error 1.5 m there), and presence values are
+  uncalibrated. The site states that heights are estimates.
+- Natural Earth was planned for the border and is not used.
+
+### Data pipeline: geospatial dependencies
+
+Verified on 2026-11-15 from each package's metadata in the virtual
+environment.
+
+| Package | License |
+|---|---|
+| numpy | BSD-3-Clause |
+| scipy | BSD-3-Clause |
+| rasterio (bundles GDAL, MIT) | BSD-3-Clause |
+| shapely (bundles GEOS, LGPL-2.1, dynamically linked) | BSD-3-Clause |
+| pyproj (bundles PROJ, MIT) | MIT |
+| osmium | BSD-2-Clause |
+| requests | Apache-2.0 |
 
 ## Fonts (planned, not yet added)
 

@@ -84,3 +84,85 @@ considered, and why. Newest at the bottom.
 - Reason: the sandbox ships a matching Chromium and cannot use another
   version. CI installs the same pinned version's browser, so local and CI
   screenshots come from the same engine.
+
+## 13. One local grid: transverse Mercator centred on 30 E
+- Decision: all data is reprojected to a custom transverse Mercator
+  (`+proj=tmerc +lat_0=-2 +lon_0=30 +k=0.9999`), in metres.
+- Alternatives: UTM zone 35S or 36S; Web Mercator.
+- Reason: Rwanda straddles the 30 E line between two UTM zones, and Kigali
+  sits on it. One custom grid has no seam and keeps distance error under
+  0.05% across the country (tested).
+
+## 14. Three terrain levels
+- Decision: country at 250 m (1120 x 1024), region around Kigali at 90 m
+  (1024 x 1024), Kigali at 30 m (1280 x 1280).
+- Alternatives: two levels; a tile pyramid.
+- Reason: 250 m is enough from high altitude and fits the first-frame
+  budget (1.05 MB). The dive across the hills needs something between
+  250 m and 30 m, which the 90 m region provides. Three fixed grids are far
+  simpler to load and test than a pyramid at this scale.
+
+## 15. The Kigali grid covers the whole City of Kigali
+- Decision: a 38.4 km square (1280 x 1280 cells at 30 m), placed around the
+  city's administrative boundary with at least 2.5 km of margin.
+- Alternatives: a 30.72 km square (1024 x 1024), which held 88% of the city.
+- Reason: statistics can be stated for the official City of Kigali, and the
+  Nyabarongo valley on the city's edge is inside the water simulation. The
+  cost is 56% more simulation cells; weaker devices use the 60 m version.
+
+## 16. Self-compressed asset container
+- Decision: every binary asset is a small container (`HLT1`: JSON header
+  plus gzip-compressed sections) that the browser unpacks itself.
+- Alternatives: rely on the web server to compress; PNG-encoded heights;
+  an existing format such as Zarr or GeoTIFF.
+- Reason: GitHub Pages does not compress arbitrary binary files, browsers
+  cannot decode 16-bit PNGs through canvas, and general formats need large
+  client libraries. One tiny reader covers heights, buildings and lines.
+
+## 17. Lakes from land cover, rivers from OpenStreetMap
+- Decision: lakes come from ESA WorldCover's water class; rivers, borders
+  and place names from an OSM extract.
+- Alternatives: lakes from OSM; borders from Natural Earth.
+- Reason: the Rwanda OSM extract stops at the border and cuts Lake Kivu in
+  half. WorldCover covers the neighbours too. OSM's border is far more
+  detailed than Natural Earth's, so Natural Earth is not used at all.
+
+## 18. Building rasters read at their 4 m overview level
+- Decision: read the 4 m overview of each 0.5 m Open Buildings 2.5D
+  Temporal file over HTTP, for the windows covering Kigali only.
+- Alternatives: download the full files (about 800 MB each, 25 per year).
+- Reason: the publisher states the effective resolution is about 4 m, so
+  the overview loses nothing real, and 160 GB of downloads become 2 GB.
+
+## 19. Buildings are dated against their own final presence
+- Decision: a footprint counts as present in a year when its mean presence
+  is at least half of its own final level (the larger of 2022 and 2023).
+  Its first year is the earliest year from which it is present in at least
+  three quarters of the remaining years. Footprints whose final presence is
+  below 0.2 cannot be dated and are left out (and counted).
+- Alternatives: a fixed presence threshold of 0.5 for every footprint.
+- Reason: measured on Kigali, a fixed 0.5 marks only about a third of
+  footprints as present in 2023, because small houses are blurred in the
+  Sentinel-2 based rasters. Relative to its own final level, the 2016
+  presence of footprints forms two clear groups (about 21% near zero, the
+  rest near one) with a valley between 0.2 and 0.5. The rule was fixed from
+  this distribution, before any validation list of known developments
+  existed.
+
+## 20. Footprint confidence threshold 0.683
+- Decision: use footprints with confidence of at least 0.683, the value
+  Google publishes for 85% precision in this region's S2 cell.
+- Alternatives: 0.650 (80% precision) or 0.738 (90%).
+- Reason: a published, region-specific value rather than a round number.
+  The temporal rasters act as a second, independent filter. Counts at all
+  three thresholds are written to `buildings/stats.json`.
+
+## 21. Buildings stored as area-preserving rectangles, largest first
+- Decision: each building is an oriented rectangle with the footprint's
+  true area, in 3.84 km tiles, sorted by area within a tile.
+- Alternatives: full footprint polygons; a single file.
+- Reason: about 14 bytes per building instead of a polygon, one instanced
+  draw call per tile, and drawing only the first N of a tile is a free
+  level of detail for phones. Keeping the true area keeps the built-up
+  total honest for L-shaped buildings.
+
