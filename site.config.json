@@ -1,0 +1,11 @@
+{
+  "creatorName": "Your Name",
+  "creatorLinks": {
+    "github": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "siteUrl": "",
+  "languages": ["en"],
+  "kinyarwandaNote": "Kinyarwanda strings need review by a native speaker before shipping."
+}
