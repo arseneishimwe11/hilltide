@@ -1,0 +1,23 @@
+# dependencies and builds
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# raw source data is cached outside git; only web-ready assets are committed
+data/raw/
+data/work/
+
+# generated output that is not part of the site
+out/
+web/test-results/
+web/playwright-report/
+
+# local
+.DS_Store
+*.log
+.env
+.env.*

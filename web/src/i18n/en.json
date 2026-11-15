@@ -1,0 +1,10 @@
+{
+  "site.name": "Hilltide",
+  "site.tagline": "Rwanda's thousand hills, alive.",
+  "site.description": "A live, real-time 3D story of Rwanda and Kigali: the land, the city growing from 2016 to 2023, and where rain flows across the hills. Computed in your browser from open data.",
+  "site.noscript": "Hilltide is a live 3D experience and needs JavaScript to run.",
+  "placeholder.status": "Being built",
+  "placeholder.body": "The land, the city and the rain arrive here in stages. Nothing will be pre-recorded: every frame is computed in your browser from open data.",
+  "placeholder.acts": "Three acts: The Land. Kigali Builds Itself. Make It Rain.",
+  "about.createdBy": "Created by {name}"
+}
