@@ -1,5 +1,202 @@
 {
   "assets": {
+    "border.country": {
+      "bytes": 5416,
+      "info": {
+        "lengthKm": 939.7,
+        "level": "country",
+        "lineCount": 1,
+        "origin": [
+          -156000.0,
+          -123000.0
+        ],
+        "pointCount": 1078,
+        "unit": 0.1,
+        "what": "Rwanda border"
+      },
+      "kind": "lines",
+      "path": "border/rwanda.hlt",
+      "sha256": "e8e613283fa5e2b84c8a935cacb1909eadc5ebaae2748c333546792558401b83",
+      "sources": [
+        "openstreetmap"
+      ],
+      "version": 1
+    },
+    "border.kigali": {
+      "bytes": 3916,
+      "info": {
+        "areaKm2": 737.5,
+        "lengthKm": 171.01,
+        "level": "kigali",
+        "lineCount": 1,
+        "origin": [
+          -4800.0,
+          -11520.0
+        ],
+        "pointCount": 768,
+        "unit": 0.1,
+        "what": "City of Kigali boundary"
+      },
+      "kind": "lines",
+      "path": "border/kigali.hlt",
+      "sha256": "b867fee50247ec103a0393bbb22e72108cafade0f39f2e20f780739c727bbe00",
+      "sources": [
+        "openstreetmap"
+      ],
+      "version": 1
+    },
+    "labels.places": {
+      "bytes": 8949,
+      "info": {
+        "country": 134,
+        "kigali": 18
+      },
+      "kind": "places",
+      "path": "labels/places.json",
+      "sha256": "621014d12d1c7b512eb3c79f16486b60f37045eb2a1e133a16e4045b7ec9898d",
+      "sources": [
+        "openstreetmap"
+      ],
+      "version": 1
+    },
+    "landcover.country": {
+      "bytes": 230201,
+      "info": {
+        "classes": {
+          "1": "tree cover",
+          "10": "moss, lichen or mangrove",
+          "2": "shrubland",
+          "3": "grassland",
+          "4": "cropland",
+          "5": "built-up",
+          "6": "bare or sparse vegetation",
+          "7": "snow and ice",
+          "8": "permanent water",
+          "9": "herbaceous wetland"
+        },
+        "grid": {
+          "cell": 250.0,
+          "height": 1024,
+          "name": "country",
+          "width": 1120,
+          "xMin": -156000.0,
+          "yMax": 133000.0
+        },
+        "share": {
+          "0": 0.0,
+          "1": 0.30642,
+          "10": 0.0,
+          "2": 0.1106,
+          "3": 0.30487,
+          "4": 0.21058,
+          "5": 0.01068,
+          "6": 0.00027,
+          "7": 0.0,
+          "8": 0.04773,
+          "9": 0.00887
+        },
+        "source": "ESA WorldCover 10 m 2021 v200"
+      },
+      "kind": "landcover",
+      "path": "landcover/country.hlt",
+      "sha256": "cc3c4cede07377b6cb40b1071fdf7d71aa4011e9f2eb4832db6b8fe43ae5b315",
+      "sources": [
+        "esa-worldcover"
+      ],
+      "version": 1
+    },
+    "landcover.kigali": {
+      "bytes": 339320,
+      "info": {
+        "classes": {
+          "1": "tree cover",
+          "10": "moss, lichen or mangrove",
+          "2": "shrubland",
+          "3": "grassland",
+          "4": "cropland",
+          "5": "built-up",
+          "6": "bare or sparse vegetation",
+          "7": "snow and ice",
+          "8": "permanent water",
+          "9": "herbaceous wetland"
+        },
+        "grid": {
+          "cell": 30.0,
+          "height": 1280,
+          "name": "kigali",
+          "width": 1280,
+          "xMin": -4800.0,
+          "yMax": 26880.0
+        },
+        "share": {
+          "0": 0.0,
+          "1": 0.2448,
+          "10": 0.0,
+          "2": 0.15083,
+          "3": 0.15507,
+          "4": 0.29861,
+          "5": 0.13569,
+          "6": 0.00217,
+          "7": 0.0,
+          "8": 0.00903,
+          "9": 0.0038
+        },
+        "source": "ESA WorldCover 10 m 2021 v200"
+      },
+      "kind": "landcover",
+      "path": "landcover/kigali.hlt",
+      "sha256": "26224bdc1d6c008357327212bbb2eb07f976b3bf450a6d3b6121319703a01a8f",
+      "sources": [
+        "esa-worldcover"
+      ],
+      "version": 1
+    },
+    "landcover.region": {
+      "bytes": 237331,
+      "info": {
+        "classes": {
+          "1": "tree cover",
+          "10": "moss, lichen or mangrove",
+          "2": "shrubland",
+          "3": "grassland",
+          "4": "cropland",
+          "5": "built-up",
+          "6": "bare or sparse vegetation",
+          "7": "snow and ice",
+          "8": "permanent water",
+          "9": "herbaceous wetland"
+        },
+        "grid": {
+          "cell": 90.0,
+          "height": 1024,
+          "name": "region",
+          "width": 1024,
+          "xMin": -31680.0,
+          "yMax": 53730.0
+        },
+        "share": {
+          "0": 0.0,
+          "1": 0.19222,
+          "10": 0.0,
+          "2": 0.10305,
+          "3": 0.19501,
+          "4": 0.42472,
+          "5": 0.04615,
+          "6": 0.00112,
+          "7": 0.0,
+          "8": 0.02199,
+          "9": 0.01573
+        },
+        "source": "ESA WorldCover 10 m 2021 v200"
+      },
+      "kind": "landcover",
+      "path": "landcover/region.hlt",
+      "sha256": "469bf1819aee4906e4c50e58e8a54420b5d1287c9ca48fd833365c48203133de",
+      "sources": [
+        "esa-worldcover"
+      ],
+      "version": 1
+    },
     "terrain.country": {
       "bytes": 1053566,
       "info": {
@@ -28,56 +225,107 @@
       "version": 1
     },
     "terrain.kigali": {
-      "bytes": 869507,
+      "bytes": 1361448,
       "info": {
-        "base": 1332.0,
+        "base": 1331.0,
         "demResolution": 30,
         "grid": {
           "cell": 30.0,
-          "height": 1024,
+          "height": 1280,
           "name": "kigali",
-          "width": 1024,
-          "xMin": -5760.0,
-          "yMax": 20160.0
+          "width": 1280,
+          "xMin": -4800.0,
+          "yMax": 26880.0
         },
-        "maxHeight": 2110.75,
-        "minHeight": 1332.5,
+        "maxHeight": 2217.5,
+        "minHeight": 1331.0,
         "source": "Copernicus DEM GLO-30",
         "step": 0.05,
         "voidsFilled": 0
       },
       "kind": "heights",
       "path": "terrain/kigali.hlt",
-      "sha256": "5dc5c410f33451ce21f23c824f9bdacd58035f8993cb0fea11e2a7720d2b2d0a",
+      "sha256": "7f5c32026a78845e8fed3685b1bc78958607af0d8a08464bf4b9b1c94b197612",
       "sources": [
         "copernicus-dem"
       ],
       "version": 1
     },
     "terrain.region": {
-      "bytes": 833454,
+      "bytes": 828271,
       "info": {
-        "base": 1307.0,
+        "base": 1294.0,
         "demResolution": 90,
         "grid": {
           "cell": 90.0,
           "height": 1024,
           "name": "region",
           "width": 1024,
-          "xMin": -36630.0,
-          "yMax": 51030.0
+          "xMin": -31680.0,
+          "yMax": 53730.0
         },
-        "maxHeight": 2640.0,
-        "minHeight": 1308.0,
+        "maxHeight": 2636.75,
+        "minHeight": 1294.5,
         "source": "Copernicus DEM GLO-90",
         "step": 0.25,
         "voidsFilled": 0
       },
       "kind": "heights",
       "path": "terrain/region.hlt",
-      "sha256": "1825d5190aff0b253aeb31764b47e5d4ac08049f66fd36e89dac30503cbd48eb",
+      "sha256": "4113e0f27e1699f093b87f619356369801fbbbbeeb92e7740f0aec12113a8efe",
       "sources": [
         "copernicus-dem"
+      ],
+      "version": 1
+    },
+    "water.country": {
+      "bytes": 29301,
+      "info": {
+        "kinds": {
+          "1": "river"
+        },
+        "lengthKm": 3744.08,
+        "level": "country",
+        "lineCount": 661,
+        "origin": [
+          -156000.0,
+          -123000.0
+        ],
+        "pointCount": 5689,
+        "unit": 0.1
+      },
+      "kind": "lines",
+      "path": "water/country.hlt",
+      "sha256": "2911a2e57f34f7ae5e66de5e603c20a7e91c6da44c35fb9d913c3ccbaf798599",
+      "sources": [
+        "openstreetmap"
+      ],
+      "version": 1
+    },
+    "water.kigali": {
+      "bytes": 44850,
+      "info": {
+        "kinds": {
+          "1": "river",
+          "2": "stream",
+          "3": "canal",
+          "4": "drain"
+        },
+        "lengthKm": 1002.18,
+        "level": "kigali",
+        "lineCount": 713,
+        "origin": [
+          -4800.0,
+          -11520.0
+        ],
+        "pointCount": 11752,
+        "unit": 0.1
+      },
+      "kind": "lines",
+      "path": "water/kigali.hlt",
+      "sha256": "b4bca02db5de81ecdf571b4de7608ac8d309ccc8aaf8de23e84e603b92e1973a",
+      "sources": [
+        "openstreetmap"
       ],
       "version": 1
     }
@@ -90,8 +338,24 @@
       "name": "Copernicus DEM GLO-30 and GLO-90",
       "publisher": "European Space Agency, Airbus",
       "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
+    },
+    "esa-worldcover": {
+      "attribution": "(c) ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium.",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "ESA WorldCover 10 m 2021 v200 (land cover)",
+      "publisher": "European Space Agency",
+      "url": "https://esa-worldcover.org/en/data-access"
+    },
+    "openstreetmap": {
+      "attribution": "(c) OpenStreetMap contributors, available under the Open Database License.",
+      "license": "ODbL 1.0 (share-alike for derived databases)",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "name": "OpenStreetMap (waterways, boundaries, place names)",
+      "publisher": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright"
     }
   },
-  "totalBytes": 2756527,
+  "totalBytes": 4142569,
   "version": 1
 }

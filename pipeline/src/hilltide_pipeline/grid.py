@@ -145,37 +145,31 @@ class Grid:
         }
 
 
-def centred_grid(
-    name: str, lon: float, lat: float, cell: float, width: int, height: int, snap: float
-) -> Grid:
-    """A grid centred near a geographic point, with its corner snapped to `snap` metres."""
-    x, y = lonlat_to_local(lon, lat)
-    x_min = round((x - width * cell / 2) / snap) * snap
-    y_max = round((y + height * cell / 2) / snap) * snap
-    return Grid(name, float(x_min), float(y_max), cell, width, height)
-
-
 # --- The three terrain levels -------------------------------------------------
 #
 # country: Rwanda with a margin of its neighbours, so the country does not
 #          float in empty space when seen from high altitude.
 # region:  the hills around Kigali that the camera flies across.
 # kigali:  the city at full terrain resolution. This is also the water
-#          simulation grid, so its size is fixed at 1024 x 1024.
+#          simulation grid.
 
-#: Centre of the Kigali grid, chosen so the built-up city, the airport and the
-#: Nyabarongo and Nyabugogo valley floors all fall inside the 30.72 km square.
-KIGALI_CENTRE_LONLAT = (30.085, -1.955)
+#: Bounding box of the City of Kigali (OpenStreetMap administrative boundary,
+#: admin level 4) in local metres: (x_min, y_min, x_max, y_max). Measured from
+#: the Rwanda extract; the Kigali grid below is placed around it.
+CITY_OF_KIGALI_BOUNDS = (-2278.0, -8827.0, 31134.0, 24370.0)
 
 COUNTRY = Grid("country", x_min=-156_000.0, y_max=133_000.0, cell=250.0, width=1120, height=1024)
-KIGALI = centred_grid(
-    "kigali", *KIGALI_CENTRE_LONLAT, cell=30.0, width=1024, height=1024, snap=960.0
-)
-REGION = centred_grid(
-    "region", *KIGALI_CENTRE_LONLAT, cell=90.0, width=1024, height=1024, snap=90.0
-)
+
+#: 38.4 km square holding the whole City of Kigali with at least 2.5 km of
+#: margin on every side, so the Nyabarongo valley along the city's western
+#: and southern edge is inside. Corners are multiples of 960 m, so the grid
+#: divides evenly into 60 m and 120 m cells and into 3.84 km building tiles.
+KIGALI = Grid("kigali", x_min=-4_800.0, y_max=26_880.0, cell=30.0, width=1280, height=1280)
+
+#: 92 km square of surrounding hills, centred on the Kigali grid.
+REGION = Grid("region", x_min=-31_680.0, y_max=53_730.0, cell=90.0, width=1024, height=1024)
 
 #: Grid the building rasters are resampled to: Kigali at their effective 4 m resolution.
-KIGALI_4M = Grid("kigali_4m", KIGALI.x_min, KIGALI.y_max, 4.0, 7680, 7680)
+KIGALI_4M = Grid("kigali_4m", KIGALI.x_min, KIGALI.y_max, cell=4.0, width=9600, height=9600)
 
 GRIDS: dict[str, Grid] = {grid.name: grid for grid in (COUNTRY, REGION, KIGALI)}

@@ -2,12 +2,12 @@ import numpy as np
 import pytest
 
 from hilltide_pipeline.grid import (
+    CITY_OF_KIGALI_BOUNDS,
     COUNTRY,
     KIGALI,
     KIGALI_4M,
     REGION,
     Grid,
-    centred_grid,
     local_to_lonlat,
     lonlat_to_local,
 )
@@ -60,15 +60,25 @@ def test_cell_indexing_convention() -> None:
 
 def test_coarsen_and_refine_keep_the_same_area() -> None:
     half = KIGALI.coarsened(2)
-    assert half.bounds == KIGALI.bounds and half.cell == 60.0 and half.shape == (512, 512)
+    assert half.bounds == KIGALI.bounds and half.cell == 60.0 and half.shape == (640, 640)
     assert KIGALI.refined(2).coarsened(2, "kigali") == KIGALI
     with pytest.raises(ValueError):
         Grid("odd", 0, 0, 1, 3, 3).coarsened(2)
 
 
-def test_kigali_grid_is_the_simulation_grid() -> None:
-    assert KIGALI.shape == (1024, 1024) and KIGALI.cell == 30.0
-    assert KIGALI_4M.bounds == KIGALI.bounds
+def test_kigali_grid_holds_the_whole_city_with_margin() -> None:
+    assert KIGALI.shape == (1280, 1280) and KIGALI.cell == 30.0
+    assert KIGALI_4M.bounds == KIGALI.bounds and KIGALI_4M.shape == (9600, 9600)
+    west, south, east, north = CITY_OF_KIGALI_BOUNDS
+    margins = (
+        west - KIGALI.x_min,
+        south - KIGALI.y_min,
+        KIGALI.x_max - east,
+        KIGALI.y_max - north,
+    )
+    assert min(margins) >= 2400.0
+    # Corners on the 960 m lattice: divides into 60 m and 120 m cells and 3.84 km tiles.
+    assert all(value % 960 == 0 for value in KIGALI.bounds)
     # City centre, the airport and the Nyabugogo wetland are inside.
     for lon, lat in [(30.0619, -1.9441), (30.1395, -1.9686), (30.044, -1.939)]:
         assert KIGALI.contains(*lonlat_to_local(lon, lat))
@@ -89,8 +99,3 @@ def test_levels_nest() -> None:
 def test_country_grid_holds_all_of_rwanda() -> None:
     west, south, east, north = COUNTRY.lonlat_bounds()
     assert west < 28.86 and east > 30.90 and south < -2.84 and north > -1.05
-
-
-def test_centred_grid_snaps_its_corner() -> None:
-    grid = centred_grid("t", 30.085, -1.955, 30.0, 1024, 1024, snap=960.0)
-    assert grid.x_min % 960 == 0 and grid.y_max % 960 == 0
