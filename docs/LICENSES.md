@@ -32,7 +32,13 @@ Verified on 2026-11-15 from each package's license file in `node_modules`.
 | @playwright/test | 1.63.0 | Apache-2.0 | LICENSE, NOTICE | No |
 | @types/node | 22.20.5 | MIT | LICENSE | No |
 
-Nothing third-party is shipped in the site bundle yet.
+### Shipped in the site bundle
+
+| Package | Version | License | License file |
+|---|---|---|---|
+| three | 0.187.0 | MIT | LICENSE ("Copyright (c) 2010-2026 three.js authors") |
+
+`@types/three` 0.187.0 (MIT) is used at build time only.
 
 ### Transitive packages
 
