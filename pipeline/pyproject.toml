@@ -3,7 +3,18 @@ name = "hilltide-pipeline"
 version = "0.1.0"
 description = "Builds Hilltide's compact web assets from open source data"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "numpy>=2.5.5",
+    "osmium>=4.3.2",
+    "pyproj>=3.8.0",
+    "rasterio>=1.5.2",
+    "requests>=2.34.2",
+    "scipy>=1.18.1",
+    "shapely>=2.2.0",
+]
+
+[project.scripts]
+hilltide-pipeline = "hilltide_pipeline.cli:main"
 
 [dependency-groups]
 dev = ["pytest", "ruff"]
