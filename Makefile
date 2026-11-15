@@ -2,7 +2,7 @@
 # Run `make help` for the list of targets.
 
 .DEFAULT_GOAL := help
-.PHONY: help setup check check-web check-pipeline build size e2e dev clean
+.PHONY: help setup check check-web check-pipeline assets build size e2e dev clean
 
 help: ## List targets
 	@grep -E '^[a-z0-9-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -18,6 +18,9 @@ check-web: ## Lint, typecheck and unit-test the web app
 
 check-pipeline: ## Lint and test the data pipeline
 	cd pipeline && uv run ruff format --check . && uv run ruff check . && uv run pytest
+
+assets: ## Rebuild every web asset from raw source data (downloads what is missing)
+	cd pipeline && uv run hilltide-pipeline
 
 build: ## Build the site into web/dist and check its size
 	cd web && npm run build

@@ -1,0 +1,97 @@
+{
+  "assets": {
+    "terrain.country": {
+      "bytes": 1053566,
+      "info": {
+        "base": 788.0,
+        "demResolution": 90,
+        "grid": {
+          "cell": 250.0,
+          "height": 1024,
+          "name": "country",
+          "width": 1120,
+          "xMin": -156000.0,
+          "yMax": 133000.0
+        },
+        "maxHeight": 4443.5,
+        "minHeight": 788.5,
+        "source": "Copernicus DEM GLO-90",
+        "step": 0.5,
+        "voidsFilled": 0
+      },
+      "kind": "heights",
+      "path": "terrain/country.hlt",
+      "sha256": "0e9b538a342dbc760dd915ca8d08a00b035d83a8c2a9bf924b1efbc115c3ad27",
+      "sources": [
+        "copernicus-dem"
+      ],
+      "version": 1
+    },
+    "terrain.kigali": {
+      "bytes": 869507,
+      "info": {
+        "base": 1332.0,
+        "demResolution": 30,
+        "grid": {
+          "cell": 30.0,
+          "height": 1024,
+          "name": "kigali",
+          "width": 1024,
+          "xMin": -5760.0,
+          "yMax": 20160.0
+        },
+        "maxHeight": 2110.75,
+        "minHeight": 1332.5,
+        "source": "Copernicus DEM GLO-30",
+        "step": 0.05,
+        "voidsFilled": 0
+      },
+      "kind": "heights",
+      "path": "terrain/kigali.hlt",
+      "sha256": "5dc5c410f33451ce21f23c824f9bdacd58035f8993cb0fea11e2a7720d2b2d0a",
+      "sources": [
+        "copernicus-dem"
+      ],
+      "version": 1
+    },
+    "terrain.region": {
+      "bytes": 833454,
+      "info": {
+        "base": 1307.0,
+        "demResolution": 90,
+        "grid": {
+          "cell": 90.0,
+          "height": 1024,
+          "name": "region",
+          "width": 1024,
+          "xMin": -36630.0,
+          "yMax": 51030.0
+        },
+        "maxHeight": 2640.0,
+        "minHeight": 1308.0,
+        "source": "Copernicus DEM GLO-90",
+        "step": 0.25,
+        "voidsFilled": 0
+      },
+      "kind": "heights",
+      "path": "terrain/region.hlt",
+      "sha256": "1825d5190aff0b253aeb31764b47e5d4ac08049f66fd36e89dac30503cbd48eb",
+      "sources": [
+        "copernicus-dem"
+      ],
+      "version": 1
+    }
+  },
+  "sources": {
+    "copernicus-dem": {
+      "attribution": "Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+      "license": "Copernicus DEM licence (free use, credit required)",
+      "licenseUrl": "https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf",
+      "name": "Copernicus DEM GLO-30 and GLO-90",
+      "publisher": "European Space Agency, Airbus",
+      "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
+    }
+  },
+  "totalBytes": 2756527,
+  "version": 1
+}
