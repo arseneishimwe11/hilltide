@@ -7,11 +7,15 @@ import { allocateInstances, type BudgetOptions } from "./budget";
 import { createBuildingMaterial, YearUniforms } from "./buildingMaterial";
 import { buildInstanceArrays, type Ground } from "./instances";
 
-/** Most buildings drawn in a frame, and how far full detail reaches, by quality tier. */
+/**
+ * Most buildings drawn in a frame, and how far full detail reaches, by
+ * quality tier. First estimates, to be replaced by measurements on real
+ * devices: a box is 10 triangles, so the high tier draws up to 6 million.
+ */
 export const BUILDING_BUDGETS: Readonly<Record<Tier, BudgetOptions>> = {
   low: { budget: 150_000, fullDetailDistance: 2_500, minShare: 0.04 },
   medium: { budget: 350_000, fullDetailDistance: 4_500, minShare: 0.08 },
-  high: { budget: 1_000_000, fullDetailDistance: 60_000, minShare: 1 },
+  high: { budget: 600_000, fullDetailDistance: 7_000, minShare: 0.2 },
 };
 
 interface LoadedTile {

@@ -92,7 +92,8 @@ test("with reduced motion the camera cuts between views instead of flying", asyn
   await page.emulateMedia({ reducedMotion: "reduce" });
   await openScene(page, { backend: "webgl2" });
   const before = await sceneValue(page, "renderedFrames");
-  await goToProgress(page, 0.62);
+  // 0.3 is before the buildings start loading, so the only redraws are the camera's.
+  await goToProgress(page, 0.3);
   const after = await sceneValue(page, "renderedFrames");
   // One cut, a few frames at most. A flight would render dozens.
   expect(after - before).toBeLessThan(8);

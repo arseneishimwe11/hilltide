@@ -262,3 +262,58 @@ considered, and why. Newest at the bottom.
   frame. With these, rendering and compute both work, here and on GitHub's
   runners, so both backends are tested on every push.
 
+## 33. Buildings are instanced boxes; the year is a pair of weight vectors
+- Decision: every building is the same unit box, drawn once per tile with
+  per-building attributes (place, shape, eight yearly heights in bytes). The
+  shader's height is the dot product of those eight heights with eight
+  weights computed on the CPU for the slider's year.
+- Alternatives: rebuild meshes when the year changes; a height texture
+  indexed by year; one draw call for the whole city.
+- Reason: moving the slider changes two small uniforms and nothing else, so
+  it costs nothing per building. Because heights are zero before a
+  building's first year, the same sum makes it rise during the year before
+  it appears, with no special case.
+
+## 34. Level of detail by drawing the first N buildings of each tile
+- Decision: tiles outside the view are skipped; a tile draws all its
+  buildings when near and a share that falls with the square of distance
+  when far; if the total exceeds the device's budget, all tiles are scaled
+  down together. Budgets: 150,000 (low), 350,000 (medium), 600,000 (high).
+- Alternatives: merged far-distance meshes; impostors; drawing everything.
+- Reason: the pipeline already stores each tile largest building first, so
+  "the first N" is always the N that matter most at that distance, and the
+  whole scheme is one integer per tile. The budgets are estimates until
+  measured on real devices; the page states how many it is drawing.
+
+## 35. Building bases are sunk into slopes
+- Decision: each box's base is lowered by the terrain's drop across half
+  the building (at most 12 m); the roof stays at ground plus height.
+- Alternatives: flat base at centre height; per-corner ground heights.
+- Reason: Kigali is built on slopes. A flat base leaves the downhill edge
+  hanging in the air; this costs one number per building.
+
+## 36. The year follows the scroll; the slider and Play move the scroll
+- Decision: in Act 2 the year is a function of scroll position. Dragging
+  the slider or pressing Play scrolls the page to the matching position.
+- Alternatives: an independent year state beside the scroll.
+- Reason: one source of truth. The camera, the text and the year can never
+  disagree, and the browser's own scroll gives touch, wheel and keyboard
+  control for free. Any scroll input by the visitor stops Play.
+
+## 37. Counts on screen are for the City of Kigali, with the uncertainty beside them
+- Decision: the figures use the official city boundary (not the whole
+  38 km grid), and the sentence under the slider gives the growth range
+  across dating thresholds and the rasters' own count.
+- Alternatives: grid totals; a single headline number.
+- Reason: "City of Kigali" is a defined place a reader can check. The
+  2016 count is uncertain (decision 22), and the page should say so where
+  the number is shown, not in a footnote.
+
+## 38. Tests cap the buildings drawn
+- Decision: `?buildings=N` limits buildings per frame. Browser tests use
+  40,000 (15,000 for the flight test).
+- Alternatives: test at the real budgets.
+- Reason: the test machines rasterise on the CPU; 350,000 boxes take tens
+  of seconds per frame there. The cap changes how many are drawn, not how
+  they are drawn. Real budgets need real devices.
+

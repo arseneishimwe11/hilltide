@@ -50,7 +50,11 @@ for (const backend of ["webgl2", "webgpu"] as const) {
   });
 }
 
-test("more of the city stands in later years, seen from one fixed view", async ({ page }) => {
+test("more of the city stands in later years, seen from one fixed view", async ({
+  page,
+}, testInfo) => {
+  // The logic under test does not depend on the viewport; one is enough in software rendering.
+  test.skip(testInfo.project.name !== "desktop", "run on the desktop viewport only");
   // With the camera held still (the end of Act 1 looks over Kigali), only the year changes.
   await openScene(page, { backend: "webgl2", extra: "still&holdCamera" });
   await goToYear(page, 2016);
@@ -105,7 +109,9 @@ test("the figures on screen are the figures in the data", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("between two data years the count is interpolated", async ({ page }) => {
+test("between two data years the count is interpolated", async ({ page }, testInfo) => {
+  // The logic under test does not depend on the viewport; one is enough in software rendering.
+  test.skip(testInfo.project.name !== "desktop", "run on the desktop viewport only");
   await openScene(page, { backend: "webgl2", extra: "quality=low", buildings: 15_000 });
   const stats = await loadStats(page);
   const a = stats.city.byYear.find((row) => row.year === 2019);
@@ -122,7 +128,11 @@ test("between two data years the count is interpolated", async ({ page }) => {
   );
 });
 
-test("the year slider works from the keyboard, and Play runs the years", async ({ page }) => {
+test("the year slider works from the keyboard, and Play runs the years", async ({
+  page,
+}, testInfo) => {
+  // The logic under test does not depend on the viewport; one is enough in software rendering.
+  test.skip(testInfo.project.name !== "desktop", "run on the desktop viewport only");
   await openScene(page, { backend: "webgl2", extra: "still" });
   await goToYear(page, 2019);
   const slider = page.getByRole("slider", { name: "Year" });
