@@ -235,6 +235,30 @@ export class LandScene {
     return 0;
   }
 
+  /**
+   * Height and steepness of the ground under a point, from the finest level
+   * that covers it. Used to stand buildings on the land.
+   */
+  groundDetail(x: number, y: number): { height: number; slope: number } {
+    for (let i = LEVEL_ORDER.length - 1; i >= 0; i--) {
+      const entry = this.levels.get(LEVEL_ORDER[i] as LevelName);
+      if (entry === undefined) continue;
+      const { grid, heights } = entry.terrain;
+      const col = Math.floor((x - grid.xMin) / grid.cell);
+      const row = Math.floor((grid.yMax - y) / grid.cell);
+      if (col < 0 || col >= grid.width || row < 0 || row >= grid.height) continue;
+      const at = (r: number, c: number): number =>
+        heights[
+          Math.min(Math.max(r, 0), grid.height - 1) * grid.width +
+            Math.min(Math.max(c, 0), grid.width - 1)
+        ] as number;
+      const east = (at(row, col + 1) - at(row, col - 1)) / (2 * grid.cell);
+      const north = (at(row - 1, col) - at(row + 1, col)) / (2 * grid.cell);
+      return { height: at(row, col), slope: Math.hypot(east, north) };
+    }
+    return { height: 0, slope: 0 };
+  }
+
   /** Places the camera and adapts haze, relief shading and depth range to its altitude. */
   setCamera(pose: CameraPose, aspect: number): void {
     const [x, y, z] = pose.position;

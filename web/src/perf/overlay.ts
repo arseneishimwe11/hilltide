@@ -17,6 +17,7 @@ export interface PerfReport {
   readonly totalHitches: number;
   readonly loadedLevels: readonly string[];
   readonly firstFrame: { ms: number; bytes: number; requests: number } | null;
+  readonly buildingsDrawn: number;
 }
 
 /**
@@ -57,6 +58,7 @@ export class PerfOverlay {
       `${report.drawingBuffer} px, ratio ${report.devicePixelRatio}`,
       `quality ${report.quality.tier} x${report.quality.resolutionScale.toFixed(1)}`,
       `levels ${report.loadedLevels.join(" ")}`,
+      `buildings drawn ${report.buildingsDrawn.toLocaleString("en")}`,
       report.firstFrame === null
         ? ""
         : `first frame ${report.firstFrame.ms} ms, ${(report.firstFrame.bytes / 1e6).toFixed(2)} MB`,

@@ -107,6 +107,16 @@ export interface BuildingStats {
     readonly areaKm2: number;
     readonly byYear: readonly YearTotals[];
   };
+  /** City counts in the first and last year under other dating thresholds. */
+  readonly sensitivity: {
+    readonly note: string;
+    readonly byThreshold: readonly {
+      readonly threshold: number;
+      readonly firstYearCount: number;
+      readonly lastYearCount: number;
+      readonly growthPercent: number;
+    }[];
+  };
   readonly rasters: { readonly note: string; readonly byYear: readonly RasterYear[] };
   readonly tiles: {
     readonly size: number;

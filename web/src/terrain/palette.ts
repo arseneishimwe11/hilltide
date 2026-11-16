@@ -2,8 +2,9 @@ import { LandClass } from "../data/landcover";
 
 /**
  * Ground colours by land-cover class, drawn from the place: deep hill
- * greens, the yellow-green of cultivated slopes, laterite red on bare and
- * built ground, dark lake water. sRGB hex values.
+ * greens, the yellow-green of cultivated slopes, laterite red on bare
+ * ground, a darker earth under built-up areas (so roofs stand out on it),
+ * dark lake water. sRGB hex values.
  */
 export const LAND_COLOURS: Readonly<Record<number, number>> = {
   [LandClass.None]: 0x5d6f58,
@@ -11,7 +12,7 @@ export const LAND_COLOURS: Readonly<Record<number, number>> = {
   [LandClass.Shrubland]: 0x4a6f4b,
   [LandClass.Grassland]: 0x6f875a,
   [LandClass.Cropland]: 0x778a57,
-  [LandClass.BuiltUp]: 0x94705d,
+  [LandClass.BuiltUp]: 0x7b6353,
   [LandClass.Bare]: 0xa9643f,
   [LandClass.Snow]: 0xe8ece6,
   [LandClass.Water]: 0x0f3140,

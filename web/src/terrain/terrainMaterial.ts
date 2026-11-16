@@ -90,6 +90,22 @@ export function curvatureDrop(xy: V2, scene: SceneUniforms): F {
   return dot(offset, offset).div(2 * EARTH_RADIUS);
 }
 
+/**
+ * Aerial haze over a lit colour: it grows with distance from the camera,
+ * gathers in low ground, and the farthest things take the colour of the
+ * horizon sky. `position` is the point as drawn (after the curvature drop),
+ * `height` its true height in metres.
+ */
+export function applyHaze(colour: V3, position: V3, height: F, scene: SceneUniforms): V3 {
+  const distance = length(cameraPosition.sub(position));
+  const lowGround = exp(height.sub(1300).div(-900)).mul(0.5).add(0.5);
+  const haze = float(1)
+    .sub(exp(distance.mul(scene.hazeDensity).mul(lowGround).negate()))
+    .mul(scene.hazeLimit);
+  const hazeTint = mix(scene.hazeColour, scene.skyHorizon, smoothstep(0.5, 0.95, haze));
+  return mix(colour, hazeTint, haze);
+}
+
 interface LevelNodes {
   /** Bilinear texel: height, east slope, north slope (class channel is not meaningful here). */
   readonly surface: V4;
@@ -284,15 +300,7 @@ export function createTerrainMaterial(
     ).add(scene.lightColour.mul(glint));
     const surfaceColour = mix(landColour, waterColour, smoothstep(0.35, 0.65, water));
 
-    // Haze: grows with distance, and gathers in low ground.
-    const distance = length(cameraPosition.sub(curved));
-    const lowGround = exp(height.sub(1300).div(-900)).mul(0.5).add(0.5);
-    const haze = float(1)
-      .sub(exp(distance.mul(scene.hazeDensity).mul(lowGround).negate()))
-      .mul(scene.hazeLimit);
-    // Near haze has its own colour; the farthest land takes the colour of the horizon sky.
-    const hazeTint = mix(scene.hazeColour, scene.skyHorizon, smoothstep(0.5, 0.95, haze));
-    const hazed = mix(surfaceColour, hazeTint, haze);
+    const hazed = applyHaze(surfaceColour, curved, height, scene);
 
     // Rwanda apart from its neighbours, when seen from high above: the surroundings are
     // dimmed and drained of colour, a pale line follows the border, and far land fades out.

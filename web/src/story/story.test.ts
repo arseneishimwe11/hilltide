@@ -9,6 +9,8 @@ import {
   shiftBesideText,
   tiltForPortrait,
 } from "./cameraPath";
+import { CITY_KEYS, FIRST_YEAR, LAST_YEAR, progressForYear, yearForProgress } from "./cityStory";
+import { LAND_KEYS } from "./landStory";
 import {
   type Chapter,
   chapterAt,
@@ -215,5 +217,37 @@ describe("chapters", () => {
     expect(chapterOpacity(hills, 0.75)).toBe(0);
     expect(chapterOpacity(kigali, 1)).toBe(1); // stays at the end
     expect(chapterOpacity(hills, 0.1)).toBe(0);
+  });
+});
+
+describe("Act 2 story", () => {
+  it("starts exactly where Act 1 ends, so the camera does not jump between acts", () => {
+    const landEnd = samplePath(LAND_KEYS, 1);
+    const cityStart = samplePath(CITY_KEYS, 0);
+    expect(poseDistance(landEnd, cityStart)).toBeLessThan(1e-6);
+  });
+
+  it("runs the years from 2016 to 2023 and holds still at both ends", () => {
+    expect(yearForProgress(0)).toBe(FIRST_YEAR);
+    expect(yearForProgress(0.1)).toBe(FIRST_YEAR);
+    expect(yearForProgress(0.5)).toBeCloseTo(2019.5);
+    expect(yearForProgress(0.9)).toBe(LAST_YEAR);
+    expect(yearForProgress(1)).toBe(LAST_YEAR);
+  });
+
+  it("never runs backwards", () => {
+    let previous = FIRST_YEAR;
+    for (let p = 0; p <= 1; p += 0.01) {
+      expect(yearForProgress(p)).toBeGreaterThanOrEqual(previous);
+      previous = yearForProgress(p);
+    }
+  });
+
+  it("maps a year back to its place in the act", () => {
+    for (const year of [2016, 2017.25, 2019.5, 2022, 2023]) {
+      expect(yearForProgress(progressForYear(year))).toBeCloseTo(year);
+    }
+    expect(progressForYear(1990)).toBe(progressForYear(FIRST_YEAR));
+    expect(progressForYear(2050)).toBe(progressForYear(LAST_YEAR));
   });
 });

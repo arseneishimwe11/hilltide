@@ -13,6 +13,8 @@ export interface OpenOptions {
   readonly time?: string;
   /** Extra query parameters, for example "still" or "perf=1". */
   readonly extra?: string;
+  /** Most buildings drawn per frame. */
+  readonly buildings?: number;
 }
 
 /** Collects page errors and console errors; assert on the returned list at the end of a test. */
@@ -31,6 +33,9 @@ export async function openScene(page: Page, options: OpenOptions = {}): Promise<
     options.backend === "webgl2" ? "backend=webgl2" : "",
     `time=${options.time ?? TIMES.morning}`,
     "quality=medium",
+    // A software rasteriser cannot draw hundreds of thousands of boxes per frame in
+    // reasonable time; tests cap the buildings drawn. Real devices use their tier's budget.
+    `buildings=${options.buildings ?? 40_000}`,
     options.extra ?? "",
   ]
     .filter((part) => part !== "")
@@ -45,7 +50,16 @@ export async function openScene(page: Page, options: OpenOptions = {}): Promise<
   expect(failed, "the scene should start without failing").toBeNull();
 }
 
-type DataKey = "backend" | "levels" | "firstFrame" | "renderedFrames" | "quality" | "gpu";
+type DataKey =
+  | "backend"
+  | "levels"
+  | "firstFrame"
+  | "renderedFrames"
+  | "quality"
+  | "gpu"
+  | "year"
+  | "buildings"
+  | "cityProgress";
 
 /** Reads one field of the page's state object. */
 export function sceneValue<K extends DataKey>(page: Page, key: K): Promise<HilltideState[K]> {
@@ -117,4 +131,62 @@ export async function screenshotStats(page: Page, path: string): Promise<ImageSt
       brightness: mean,
     };
   }, png.toString("base64"));
+}
+
+/** Scrolls Act 2 to a year and waits until buildings are loaded and the camera has settled. */
+export async function goToYear(page: Page, year: number): Promise<void> {
+  await page.evaluate((value) => window.__hilltide?.scrollToYear(value), year);
+  await page.waitForFunction(
+    (value) => {
+      const state = window.__hilltide;
+      return (
+        state?.settled === true &&
+        Math.abs(state.year - value) < 0.51 &&
+        state.buildings.total > 0 &&
+        state.buildings.loaded === state.buildings.total
+      );
+    },
+    year,
+    { timeout: 200_000 },
+  );
+}
+
+/**
+ * Share of pixels that differ visibly between two screenshots, inside a
+ * region given as fractions of the image (left, top, right, bottom).
+ */
+export async function changedShare(
+  page: Page,
+  before: Buffer,
+  after: Buffer,
+  region: readonly [number, number, number, number],
+): Promise<number> {
+  return page.evaluate(
+    async ({ a, b, box }) => {
+      const load = async (base64: string): Promise<ImageData> => {
+        const bytes = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
+        const bitmap = await createImageBitmap(new Blob([bytes], { type: "image/png" }));
+        const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+        const context = canvas.getContext("2d");
+        if (context === null) throw new Error("no 2d context");
+        context.drawImage(bitmap, 0, 0);
+        const x0 = Math.floor(bitmap.width * (box[0] as number));
+        const y0 = Math.floor(bitmap.height * (box[1] as number));
+        const x1 = Math.floor(bitmap.width * (box[2] as number));
+        const y1 = Math.floor(bitmap.height * (box[3] as number));
+        return context.getImageData(x0, y0, x1 - x0, y1 - y0);
+      };
+      const [first, second] = await Promise.all([load(a), load(b)]);
+      let changed = 0;
+      for (let i = 0; i < first.data.length; i += 4) {
+        const difference =
+          Math.abs((first.data[i] as number) - (second.data[i] as number)) +
+          Math.abs((first.data[i + 1] as number) - (second.data[i + 1] as number)) +
+          Math.abs((first.data[i + 2] as number) - (second.data[i + 2] as number));
+        if (difference > 36) changed++;
+      }
+      return changed / (first.data.length / 4);
+    },
+    { a: before.toString("base64"), b: after.toString("base64"), box: [...region] },
+  );
 }

@@ -4,6 +4,7 @@ import type { Chapter } from "../story/scroll";
 import { chapterOpacity } from "../story/scroll";
 import { el } from "./dom";
 import { ridgeLayers } from "./ridges";
+import { YearControl } from "./yearControl";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -30,14 +31,26 @@ export interface SunControlState {
   readonly night: boolean;
 }
 
+export interface StoryChapters {
+  readonly land: readonly Chapter[];
+  readonly city: readonly Chapter[];
+}
+
+export interface StoryYears {
+  readonly first: number;
+  readonly last: number;
+}
+
 /**
  * The page around the live scene: the canvas, the scrolling story with its
- * chapter text, the loading cover and the sun control.
+ * chapter text, the year control, the loading cover and the sun control.
  */
 export class StoryView {
   readonly canvas: HTMLCanvasElement;
-  /** The tall element whose scroll span drives Act 1. */
+  /** The tall elements whose scroll spans drive each act. */
   readonly landSection: HTMLElement;
+  readonly citySection: HTMLElement;
+  readonly yearControl: YearControl;
   private readonly cover: HTMLElement;
   private readonly coverStatus: HTMLElement;
   private readonly chapterNodes = new Map<string, HTMLElement>();
@@ -49,17 +62,18 @@ export class StoryView {
 
   constructor(
     root: HTMLElement,
-    private readonly chapters: readonly Chapter[],
+    private readonly chapters: StoryChapters,
+    years: StoryYears,
     config: SiteConfig,
   ) {
     this.canvas = el("canvas", "scene");
     this.canvas.setAttribute("aria-hidden", "true");
-
     const main = el("main", "story");
+
+    // --- Act 1 ---------------------------------------------------------------
     this.landSection = el("section", "act act--land");
     this.landSection.setAttribute("aria-label", t("land.kicker"));
-    const pin = el("div", "act__pin");
-
+    const landPin = el("div", "act__pin");
     const title = el("div", "chapter chapter--title");
     title.append(
       el("h1", "chapter__name", t("site.name")),
@@ -70,29 +84,42 @@ export class StoryView {
       title.append(el("p", "chapter__credit", t("about.createdBy", { name: config.creatorName })));
     }
     this.chapterNodes.set("title", title);
+    landPin.append(
+      title,
+      this.chapter("country", "land.kicker", t("land.country.title"), t("land.country.body")),
+      this.chapter("hills", "land.kicker", t("land.hills.title"), t("land.hills.body")),
+    );
+    const kigali = this.chapter("kigali", "land.kicker", t("land.kigali.title"), "");
+    this.kigaliBody = kigali.querySelector(".chapter__body") as HTMLElement;
+    landPin.append(kigali);
+    this.landSection.append(landPin);
 
-    const text = (id: string, titleKey: MessageKey, bodyKey: MessageKey): HTMLElement => {
-      const node = el("div", "chapter");
-      const body = el("p", "chapter__body", t(bodyKey));
-      node.append(
-        el("p", "chapter__kicker", t("land.kicker")),
-        el("h2", "chapter__title", t(titleKey)),
-        body,
-      );
-      this.chapterNodes.set(id, node);
-      return body;
-    };
-    text("country", "land.country.title", "land.country.body");
-    text("hills", "land.hills.title", "land.hills.body");
-    this.kigaliBody = text("kigali", "land.kigali.title", "land.kigali.body");
-    this.kigaliBody.textContent = "";
-
-    pin.append(...this.chapterNodes.values());
-    this.landSection.append(pin);
+    // --- Act 2 ---------------------------------------------------------------
+    this.citySection = el("section", "act act--city");
+    this.citySection.setAttribute("aria-label", t("city.kicker"));
+    const cityPin = el("div", "act__pin");
+    this.yearControl = new YearControl(years.first, years.last);
+    cityPin.append(
+      this.chapter(
+        "city-intro",
+        "city.kicker",
+        t("city.intro.title", { year: years.first }),
+        t("city.intro.body"),
+      ),
+      this.chapter("city-growth", "city.kicker", t("city.growth.title"), t("city.growth.body")),
+      this.chapter(
+        "city-now",
+        "city.kicker",
+        t("city.now.title", { year: years.last }),
+        t("city.now.body"),
+      ),
+      this.yearControl.root,
+    );
+    this.citySection.append(cityPin);
 
     const outro = el("section", "outro");
-    outro.append(el("p", "outro__text", t("land.next")));
-    main.append(this.landSection, outro);
+    outro.append(el("p", "outro__text", t("next.note")));
+    main.append(this.landSection, this.citySection, outro);
 
     const sun = el("div", "sun");
     this.sunLabel = el("span", "sun__label");
@@ -108,18 +135,33 @@ export class StoryView {
     this.cover.append(ridgeDrawing(), this.coverStatus);
 
     root.replaceChildren(this.canvas, main, sun, this.cover);
-    this.setProgress(0);
+    this.setProgress(0, 0);
   }
 
-  /** Shows the chapter text that belongs to a story progress value. */
-  setProgress(progress: number): void {
-    for (const chapter of this.chapters) {
-      const node = this.chapterNodes.get(chapter.id);
-      if (node === undefined) continue;
-      const opacity = chapterOpacity(chapter, progress);
-      node.style.opacity = opacity.toFixed(3);
-      node.style.visibility = opacity > 0.01 ? "visible" : "hidden";
-    }
+  private chapter(id: string, kicker: MessageKey, title: string, body: string): HTMLElement {
+    const node = el("div", "chapter");
+    node.append(
+      el("p", "chapter__kicker", t(kicker)),
+      el("h2", "chapter__title", title),
+      el("p", "chapter__body", body),
+    );
+    this.chapterNodes.set(id, node);
+    return node;
+  }
+
+  /** Shows the chapter text that belongs to the progress through each act. */
+  setProgress(land: number, city: number): void {
+    const show = (chapters: readonly Chapter[], progress: number): void => {
+      for (const chapter of chapters) {
+        const node = this.chapterNodes.get(chapter.id);
+        if (node === undefined) continue;
+        const opacity = chapterOpacity(chapter, progress);
+        node.style.opacity = opacity.toFixed(3);
+        node.style.visibility = opacity > 0.01 ? "visible" : "hidden";
+      }
+    };
+    show(this.chapters.land, land);
+    show(this.chapters.city, city);
   }
 
   /** Fills in the measured elevation of Kigali's centre. */
