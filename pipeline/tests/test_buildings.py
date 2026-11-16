@@ -15,6 +15,7 @@ from hilltide_pipeline.buildings import (
     pack_tile,
     relative_presence,
     settle_heights,
+    threshold_sensitivity,
     tile_index,
     unpack_tile,
     yearly_totals,
@@ -70,6 +71,22 @@ def test_relative_presence_judges_each_building_against_its_own_final_level() ->
     assert first.tolist() == [3, 0, 7, -1, -1]
     # A fixed threshold of 0.5 on raw presence would have missed the small house entirely.
     assert first_year_index(presence)[0] == -1
+
+
+def test_sensitivity_counts_move_with_the_threshold() -> None:
+    relative = np.array(
+        [
+            [1.0, 1.0, 1.0, 1.0],  # always there
+            [0.4, 0.6, 1.0, 1.0],  # present from year 1 at 0.3, year 2 at 0.5, year 3 at 0.7
+            [0.0, 0.0, 0.0, 1.0],  # new in the last year
+            [1.0, 1.0, 1.0, 1.0],  # always there, but not selected
+        ]
+    )
+    selected = np.array([True, True, True, False])
+    rows = threshold_sensitivity(relative, selected, (0.3, 0.5, 0.7))
+    assert [row["firstYearCount"] for row in rows] == [2, 1, 1]
+    assert [row["lastYearCount"] for row in rows] == [3, 3, 3]
+    assert [row["growthPercent"] for row in rows] == [50.0, 200.0, 200.0]
 
 
 def test_settled_heights_ignore_one_odd_year_and_keep_growth() -> None:

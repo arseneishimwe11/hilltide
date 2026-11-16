@@ -361,6 +361,13 @@ def build_buildings(paths: Paths, say: Log = print) -> list[AssetRecord]:
             "areaKm2": round(extract.city.area / 1e6, 1),
             "byYear": buildings.yearly_totals(city_table_first, city_table_area, years),
         },
+        "sensitivity": {
+            "note": (
+                "City of Kigali counts in the first and last year under other presence "
+                "thresholds. The published figures use the threshold in 'method'."
+            ),
+            "byThreshold": buildings.threshold_sensitivity(relative, in_city, (0.3, 0.5, 0.7)),
+        },
         "rasters": {
             "note": (
                 "Computed from the 2.5D Temporal rasters alone, without footprints: area "

@@ -166,3 +166,24 @@ considered, and why. Newest at the bottom.
   level of detail for phones. Keeping the true area keeps the built-up
   total honest for L-shaped buildings.
 
+## 22. The dating threshold stays at 0.5; its sensitivity is published
+- Decision: keep the presence threshold at half of a footprint's final
+  level, and publish how the 2016 count moves with it (36.6% growth at 0.3,
+  53.3% at 0.5, 84.1% at 0.7) next to the rasters' own count (+36%).
+- Alternatives: lower the threshold to 0.3, where footprint growth happens
+  to match the rasters' own count growth.
+- Reason: moving a parameter after seeing which value gives the more
+  comfortable headline is tuning. Neither figure is ground truth: at 0.3
+  the threshold falls below the rasters' year-to-year noise for faint
+  buildings, which dates new buildings too early; at 0.5 noise can date old
+  ones too late. Large buildings, whose signal is clean, show 40% to 44%.
+  The honest position is the central rule plus its stated range. Revisit
+  only with evidence from the non-held-out validation developments.
+
+## 23. One phase per approved plan
+- Decision: at the end of each phase, stop and present the next phase's
+  plan to the owner for approval before building it.
+- Alternatives: plan each phase in writing and continue without pausing.
+- Reason: the owner enters plan mode for each phase. Phase 1 was built
+  under an earlier plan that said to continue without pausing.
+

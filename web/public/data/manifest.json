@@ -46,14 +46,14 @@
       "version": 1
     },
     "buildings.stats": {
-      "bytes": 15366,
+      "bytes": 15800,
       "info": {
         "buildings": 825495,
         "tiles": 100
       },
       "kind": "building-stats",
       "path": "buildings/stats.json",
-      "sha256": "d2baac6c6cdcddccc3af35077388b1a8de23651b4523d43edc5c134b4ea9b4f0",
+      "sha256": "c79d3ba739d82845d9281d455044fa7584b9808aa42387dac13baca414a07e9d",
       "sources": [
         "open-buildings",
         "open-buildings-temporal",
@@ -3448,15 +3448,15 @@
   },
   "sources": {
     "copernicus-dem": {
-      "attribution": "Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.",
-      "license": "Copernicus DEM licence (free use, credit required)",
-      "licenseUrl": "https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf",
+      "attribution": "Produced using Copernicus WorldDEM-30 and WorldDEM-90 \u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+      "license": "Copernicus DEM free licence (credit required)",
+      "licenseUrl": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
       "name": "Copernicus DEM GLO-30 and GLO-90",
-      "publisher": "European Space Agency, Airbus",
-      "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
+      "publisher": "European Space Agency, DLR, Airbus Defence and Space",
+      "url": "https://registry.opendata.aws/copernicus-dem/"
     },
     "esa-worldcover": {
-      "attribution": "(c) ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium.",
+      "attribution": "\u00a9 ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium.",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "name": "ESA WorldCover 10 m 2021 v200 (land cover)",
@@ -3480,7 +3480,7 @@
       "url": "https://sites.research.google/gr/open-buildings/temporal/"
     },
     "openstreetmap": {
-      "attribution": "(c) OpenStreetMap contributors, available under the Open Database License.",
+      "attribution": "\u00a9 OpenStreetMap contributors, available under the Open Database License.",
       "license": "ODbL 1.0 (share-alike for derived databases)",
       "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
       "name": "OpenStreetMap (waterways, boundaries, place names)",
@@ -3488,6 +3488,6 @@
       "url": "https://www.openstreetmap.org/copyright"
     }
   },
-  "totalBytes": 12060332,
+  "totalBytes": 12060766,
   "version": 1
 }

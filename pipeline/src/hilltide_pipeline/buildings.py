@@ -162,6 +162,33 @@ def first_year_index(
     return first
 
 
+def threshold_sensitivity(
+    relative: np.ndarray, selected: np.ndarray, thresholds: tuple[float, ...]
+) -> list[dict]:
+    """How the first-year and last-year counts move with the presence threshold.
+
+    `relative` is the output of `relative_presence`; `selected` marks the
+    buildings to count (for example those inside the city boundary). The
+    dating rule uses one threshold; this shows how much the result depends
+    on that choice.
+    """
+    rows = []
+    for threshold in thresholds:
+        first = first_year_index(relative, threshold)
+        dated = (first >= 0) & selected
+        at_start = int(((first == 0) & selected).sum())
+        at_end = int(dated.sum())
+        rows.append(
+            {
+                "threshold": threshold,
+                "firstYearCount": at_start,
+                "lastYearCount": at_end,
+                "growthPercent": round(100 * (at_end / at_start - 1), 1) if at_start else None,
+            }
+        )
+    return rows
+
+
 def settle_heights(height: np.ndarray, first: np.ndarray) -> np.ndarray:
     """Per-year heights with year-to-year noise removed; zero before the first year.
 

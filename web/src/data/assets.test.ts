@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { type BuildingStats, decodeBuildingTile } from "./buildings";
 import { decodeDelta16, decodeDelta32, decodePlane16 } from "./codecs";
 import { Container } from "./container";
 import { decodeHeights, sampleHeight } from "./heights";
@@ -150,6 +151,80 @@ describe("land cover assets from the pipeline", () => {
     let water = 0;
     for (const code of classes) if (code === LandClass.Water) water++;
     expect(water / classes.length).toBeCloseTo(cover.meta.share[String(LandClass.Water)] ?? -1, 4);
+  });
+});
+
+describe("building assets from the pipeline", () => {
+  const stats = JSON.parse(
+    readFileSync(`${dataDir}${assetEntry(manifest, "buildings.stats").path}`, "utf8"),
+  ) as BuildingStats;
+
+  it("has yearly totals that only grow, for the grid and the city", () => {
+    expect(stats.years).toEqual([2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]);
+    for (const rows of [stats.grid.byYear, stats.city.byYear]) {
+      expect(rows.map((row) => row.year)).toEqual(stats.years);
+      for (let i = 1; i < rows.length; i++) {
+        expect(rows[i]?.buildings).toBeGreaterThanOrEqual(rows[i - 1]?.buildings ?? 0);
+        expect(rows[i]?.footprintKm2).toBeGreaterThanOrEqual(rows[i - 1]?.footprintKm2 ?? 0);
+      }
+    }
+    expect(stats.city.byYear.at(-1)?.buildings).toBeLessThanOrEqual(
+      stats.grid.byYear.at(-1)?.buildings ?? 0,
+    );
+  });
+
+  it("accounts for every footprint: dated, too faint, or not steadily present", () => {
+    const { used, dated, tooFaintToDate, notSteadilyPresent } = stats.footprints;
+    expect(dated + tooFaintToDate + notSteadilyPresent).toBe(used);
+    expect(stats.grid.byYear.at(-1)?.buildings).toBe(dated);
+  });
+
+  it("has tiles whose counts add up to the dated total", () => {
+    const total = stats.tiles.list.reduce((sum, tile) => sum + tile.count, 0);
+    expect(total).toBe(stats.footprints.dated);
+    for (const tile of stats.tiles.list) {
+      const entry = assetEntry(manifest, `buildings.tile.${tile.col}.${tile.row}`);
+      expect(entry.info.count).toBe(tile.count);
+      expect(tile.countByFirstYear.reduce((sum, n) => sum + n, 0)).toBe(tile.count);
+    }
+  });
+
+  it("decodes the densest tile: inside its square, largest first, nothing before its first year", async () => {
+    const densest = [...stats.tiles.list].sort((a, b) => b.count - a.count)[0];
+    if (densest === undefined) throw new Error("no tiles");
+    const entry = assetEntry(manifest, `buildings.tile.${densest.col}.${densest.row}`);
+    const tile = await decodeBuildingTile(load(entry.path));
+    const years = tile.meta.years.length;
+
+    expect(tile.count).toBe(densest.count);
+    expect(tile.height.length).toBe(tile.count * years);
+    const [x0, y0] = tile.meta.origin;
+    const byFirstYear = new Array<number>(years).fill(0);
+    let previousArea = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < tile.count; i++) {
+      const x = tile.x[i] as number;
+      const y = tile.y[i] as number;
+      expect(x).toBeGreaterThanOrEqual(x0);
+      expect(x).toBeLessThanOrEqual(x0 + tile.meta.tileSize);
+      expect(y).toBeGreaterThanOrEqual(y0);
+      expect(y).toBeLessThanOrEqual(y0 + tile.meta.tileSize);
+
+      const length = tile.length[i] as number;
+      const width = tile.width[i] as number;
+      expect(length).toBeGreaterThanOrEqual(width - 0.11);
+      // Sorted by footprint area, up to rounding of each side to 0.1 m.
+      expect(length * width).toBeLessThanOrEqual(previousArea + 0.11 * (length + width + 1));
+      previousArea = length * width;
+
+      const first = tile.first[i] as number;
+      byFirstYear[first] = (byFirstYear[first] as number) + 1;
+      for (let year = 0; year < years; year++) {
+        const height = tile.height[i * years + year] as number;
+        if (year < first) expect(height).toBe(0);
+        else expect(height).toBeGreaterThanOrEqual(2.5);
+      }
+    }
+    expect(byFirstYear).toEqual(densest.countByFirstYear);
   });
 });
 
