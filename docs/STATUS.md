@@ -218,7 +218,7 @@ against known developments.
 | Time to first frame, headless | 0.6 to 0.8 s on a local server |
 | JavaScript bundle | 0.85 MB (0.23 MB gzipped) |
 | Total site data | 12.09 MB in 114 assets |
-| CI with the browser suite | about 3 minutes on GitHub's runners |
+| CI with the browser suite | 4 min 38 s on GitHub's runners (run 17, green) |
 
 Screenshots at five scroll positions are saved by `make e2e` to
 `web/test-results/screens/` and uploaded by CI as the "screenshots" artifact.
