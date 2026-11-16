@@ -45,6 +45,29 @@
       ],
       "version": 1
     },
+    "border.mask": {
+      "bytes": 24130,
+      "info": {
+        "grid": {
+          "cell": 1000.0,
+          "height": 256,
+          "name": "country_mask",
+          "width": 280,
+          "xMin": -156000.0,
+          "yMax": 133000.0
+        },
+        "stepsPerKm": 2,
+        "what": "signed distance to the Rwanda border, positive inside",
+        "zero": 128
+      },
+      "kind": "distance-mask",
+      "path": "border/mask.hlt",
+      "sha256": "72ac4b1138aba259f38ae0ef79b91291e7ef2acd017d11a916482fbe8187e6e8",
+      "sources": [
+        "openstreetmap"
+      ],
+      "version": 1
+    },
     "buildings.stats": {
       "bytes": 15800,
       "info": {
@@ -3161,6 +3184,20 @@
       ],
       "version": 1
     },
+    "labels.curated": {
+      "bytes": 1099,
+      "info": {
+        "count": 15
+      },
+      "kind": "labels",
+      "path": "labels/labels.json",
+      "sha256": "3563aa6d57f06d48b62403b1746a878ac9963061b8cd08d84235e680932b60aa",
+      "sources": [
+        "openstreetmap",
+        "esa-worldcover"
+      ],
+      "version": 1
+    },
     "labels.places": {
       "bytes": 8949,
       "info": {
@@ -3488,6 +3525,6 @@
       "url": "https://www.openstreetmap.org/copyright"
     }
   },
-  "totalBytes": 12060766,
+  "totalBytes": 12085995,
   "version": 1
 }

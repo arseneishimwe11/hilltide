@@ -11,7 +11,8 @@ from rasterio.enums import Resampling
 from rasterio.features import rasterize
 from rasterio.transform import Affine
 
-from . import buildings, footprints, landcover, osm, temporal, terrain
+from . import buildings, footprints, labels, landcover, osm, temporal, terrain
+from .container import Container
 from .download import SourceLog, fetch
 from .grid import COUNTRY, KIGALI, KIGALI_4M, REGION
 from .heights import KIND as HEIGHTS_KIND
@@ -171,11 +172,48 @@ def build_osm(paths: Paths, say: Log = print) -> list[AssetRecord]:
     )
     say(f"osm: places {len(places['country'])} country, {len(places['kigali'])} Kigali")
 
+    # A short curated label list. Hand-placed features are checked against land cover.
+    cover_path = paths.web_data / "landcover" / "country.hlt"
+    if not cover_path.is_file():
+        raise RuntimeError("Run the landcover step before osm: labels are checked against it")
+    country_classes, _ = landcover.unpack_landcover(Container.read(cover_path))
+    curated = labels.build_labels(extract.places, COUNTRY, country_classes)
+    relative = "labels/labels.json"
+    (paths.web_data / relative).write_text(
+        json.dumps(curated, ensure_ascii=False, separators=(",", ":")) + "\n"
+    )
+    records.append(
+        AssetRecord(
+            key="labels.curated",
+            path=relative,
+            kind="labels",
+            version=1,
+            sources=["openstreetmap", "esa-worldcover"],
+            info={"count": len(curated)},
+        )
+    )
+
+    # Signed distance to the border, for drawing Rwanda apart from its neighbours.
+    mask_grid = COUNTRY.coarsened(4, "country_mask")
+    container = labels.pack_mask(labels.country_mask(extract.country, mask_grid), mask_grid)
+    container.write(paths.web_data / "border" / "mask.hlt")
+    records.append(
+        AssetRecord(
+            key="border.mask",
+            path="border/mask.hlt",
+            kind=labels.MASK_KIND,
+            version=labels.MASK_VERSION,
+            sources=["openstreetmap"],
+            info=container.meta,
+        )
+    )
+    say(f"osm: {len(curated)} curated labels, border mask {mask_grid.width}x{mask_grid.height}")
+
     for prefix in ("water.", "border.", "labels."):
         update_manifest(
             paths.manifest,
             [r for r in records if r.key.startswith(prefix)],
-            {"openstreetmap": SOURCES["openstreetmap"]},
+            {key: SOURCES[key] for key in ("openstreetmap", "esa-worldcover")},
             remove_prefix=prefix,
         )
     return records
@@ -406,7 +444,7 @@ def build_buildings(paths: Paths, say: Log = print) -> list[AssetRecord]:
 
 STEPS: dict[str, Callable[[Paths, Log], list[AssetRecord]]] = {
     "terrain": build_terrain,
-    "osm": build_osm,
     "landcover": build_landcover,
+    "osm": build_osm,
     "buildings": build_buildings,
 }
