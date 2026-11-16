@@ -120,3 +120,24 @@ export function nearestKeyTime(keys: readonly CameraKey[], t: number): number {
   }
   return best;
 }
+
+/**
+ * Tilts the view down for tall, narrow screens. A phone held upright shows
+ * far more sky than a laptop for the same camera, so the look-at point is
+ * lowered until the horizon sits near the top again. `aspect` is width over
+ * height; landscape views are returned unchanged.
+ */
+export function tiltForPortrait(pose: CameraPose, aspect: number, fovDegrees: number): CameraPose {
+  if (aspect >= 1) return pose;
+  const dx = pose.target[0] - pose.position[0];
+  const dy = pose.target[1] - pose.position[1];
+  const ground = Math.hypot(dx, dy);
+  const drop = pose.position[2] - pose.target[2];
+  if (ground <= 0 || drop <= 0) return pose;
+  const pitch = Math.atan2(drop, ground);
+  const extra = ((fovDegrees * Math.PI) / 180) * 0.2 * clamp(1 / aspect - 1, 0, 1.2);
+  // Never past straight down.
+  const tilted = Math.min(pitch + extra, Math.PI / 2 - 0.02);
+  const height = pose.position[2] - ground * Math.tan(tilted);
+  return { position: pose.position, target: [pose.target[0], pose.target[1], height] };
+}

@@ -14,6 +14,7 @@ import {
   nearestKeyTime,
   poseDistance,
   samplePath,
+  tiltForPortrait,
 } from "./story/cameraPath";
 import { KIGALI_CENTRE, LAND_CHAPTERS, LAND_KEYS } from "./story/landStory";
 import { scrollForProgress, sectionProgress } from "./story/scroll";
@@ -34,6 +35,8 @@ export interface HilltideState {
   levels: LevelName[];
   quality: QualityState;
   renderedFrames: number;
+  /** Time and downloaded bytes up to the first live frame; null until then. */
+  firstFrame: { ms: number; bytes: number; requests: number } | null;
   frames(): FrameSummary;
   scrollToProgress(progress: number): void;
 }
@@ -50,6 +53,19 @@ const CAMERA_CLEARANCE = 350;
 const CAMERA_HALF_LIFE = 0.16;
 /** How often the live sun position is refreshed, in milliseconds. */
 const SUN_REFRESH_MS = 20_000;
+
+/** Everything downloaded so far (the page itself, code, data), from the browser's own records. */
+function measureFirstFrame(): { ms: number; bytes: number; requests: number } {
+  const entries = [
+    ...performance.getEntriesByType("navigation"),
+    ...performance.getEntriesByType("resource"),
+  ] as PerformanceResourceTiming[];
+  const bytes = entries.reduce(
+    (sum, entry) => sum + (entry.transferSize > 0 ? entry.transferSize : entry.encodedBodySize),
+    0,
+  );
+  return { ms: Math.round(performance.now()), bytes, requests: entries.length };
+}
 
 function isTier(value: string | null): value is Tier {
   return value === "low" || value === "medium" || value === "high";
@@ -72,6 +88,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
     levels: [],
     quality: { tier: "medium", resolutionScale: 1 },
     renderedFrames: 0,
+    firstFrame: null,
     frames: () => stats.summary(),
     scrollToProgress: (progress) => {
       const section = view.landSection;
@@ -189,11 +206,12 @@ export async function startApp(root: HTMLElement): Promise<void> {
   };
   const goalFor = (progress: number): CameraPose => {
     const along = reducedMotion ? nearestKeyTime(LAND_KEYS, progress) : progress;
-    return keepAboveGround(
+    const framed = tiltForPortrait(
       samplePath(LAND_KEYS, along),
-      (x, y) => land.groundAt(x, y),
-      CAMERA_CLEARANCE,
+      window.innerWidth / window.innerHeight,
+      land.camera.fov,
     );
+    return keepAboveGround(framed, (x, y) => land.groundAt(x, y), CAMERA_CLEARANCE);
   };
   let pose = goalFor(readProgress());
 
@@ -267,6 +285,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
 
       if (!state.ready) {
         state.ready = true;
+        state.firstFrame = measureFirstFrame();
         state.levels = land.loadedLevels;
         view.reveal();
         void loadFinerLevels();
@@ -291,6 +310,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
         totalFrames: stats.totalFrames,
         totalHitches: stats.totalHitches,
         loadedLevels: land.loadedLevels,
+        firstFrame: state.firstFrame,
       };
       perf.update(report);
     }

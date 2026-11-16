@@ -19,7 +19,7 @@ test("the page loads, shows its name and tagline, and has no errors", async ({
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 
   await page.screenshot({
-    path: `test-results/screens/placeholder-${testInfo.project.name}.png`,
+    path: `test-results/screens/landing-${testInfo.project.name}.png`,
     fullPage: true,
   });
   expect(errors).toEqual([]);

@@ -6,6 +6,7 @@ import {
   nearestKeyTime,
   poseDistance,
   samplePath,
+  tiltForPortrait,
 } from "./cameraPath";
 import {
   type Chapter,
@@ -109,6 +110,34 @@ describe("reduced motion", () => {
     expect(nearestKeyTime(keys, 0.61)).toBe(0.8);
     expect(nearestKeyTime(keys, 0.95)).toBe(1);
     expect(nearestKeyTime([], 0.5)).toBe(0);
+  });
+});
+
+describe("portrait framing", () => {
+  const low = { position: [0, 0, 5000], target: [10_000, 0, 1500] } as const;
+
+  it("leaves landscape views alone", () => {
+    expect(tiltForPortrait(low, 1.6, 38)).toBe(low);
+    expect(tiltForPortrait(low, 1, 38)).toBe(low);
+  });
+
+  it("looks further down on a tall screen, more so the taller it is", () => {
+    const phone = tiltForPortrait(low, 0.5, 38);
+    const tablet = tiltForPortrait(low, 0.75, 38);
+    expect(phone.position).toEqual(low.position);
+    expect(phone.target[2]).toBeLessThan(tablet.target[2]);
+    expect(tablet.target[2]).toBeLessThan(low.target[2]);
+    // About 7.6 degrees more pitch for a phone: 20 percent of the field of view.
+    const pitch = (pose: typeof low): number =>
+      (Math.atan2(pose.position[2] - pose.target[2], 10_000) * 180) / Math.PI;
+    expect(pitch(phone as typeof low) - pitch(low)).toBeCloseTo(7.6, 1);
+  });
+
+  it("never tilts past straight down", () => {
+    const steep = { position: [0, 0, 300_000], target: [1000, 0, 1500] } as const;
+    const tilted = tiltForPortrait(steep, 0.45, 38);
+    expect(Number.isFinite(tilted.target[2])).toBe(true);
+    expect(tilted.target[2]).toBeLessThan(steep.position[2]);
   });
 });
 
