@@ -1,6 +1,6 @@
 # Hilltide: status
 
-Last updated: 2026-11-16, end of Phase 2.
+Last updated: 2026-11-16, end of Phase 3.
 
 A new session can resume from `CLAUDE.md`, `docs/PROJECT_BRIEF.md` and this
 file. Decisions are in `docs/DECISIONS.md`, licenses in `docs/LICENSES.md`.
@@ -12,8 +12,8 @@ file. Decisions are in `docs/DECISIONS.md`, licenses in `docs/LICENSES.md`.
 | 0 Foundations | Done |
 | 1 Data pipeline | Done |
 | 2 The Land | Done |
-| 3 Kigali Builds Itself | Next. Plan proposed below; waiting for the owner's approval. |
-| 4 Make It Rain | Not started |
+| 3 Kigali Builds Itself | Done |
+| 4 Make It Rain | Next. Plan proposed below; waiting for the owner's approval. |
 | 5 Validation | Not started |
 | 6 Story and design | Not started |
 | 7 Capture mode | Not started |
@@ -265,36 +265,114 @@ percentile shows. Real-device measurements: none yet (Needs owner 6).
 - The first palette and haze washed out low views; slope shading and
   thinner haze near the ground fixed it.
 
-## Phase 3 plan proposal: Kigali Builds Itself (not yet approved)
+## Phase 3 report (Kigali Builds Itself)
 
-Goal: a year slider from 2016 to 2023 that makes the city rise out of the
-hills, building by building, with live counts, on a mid-range phone.
+### What works
+- Act 2 follows Act 1 on the same page. The camera drops to about 900 m
+  above the ridges and moves round the south of the city while the years
+  run from 2016 to 2023.
+- All 825,495 dated buildings load (100 tiles, nearest the centre first)
+  once the visitor is a third of the way through Act 1. Each is a box with
+  the true footprint area, standing on the terrain, with its base sunk into
+  slopes.
+- The year drives every building's height on the GPU: a building rises
+  from the ground during the year before the record first shows it, and
+  glows in a warm tint for about a year and a half afterwards.
+- Year control: a native slider (keyboard, touch, screen reader), Play and
+  Pause, and figures for the City of Kigali read from the statistics file:
+  buildings standing, added since 2016, footprint area. Between data years
+  the figures are interpolated.
+- The uncertainty is on the page, under the slider: growth by this method,
+  the range across dating thresholds, and the rasters' own count. So is the
+  number of buildings the device is actually drawing.
+- Level of detail: tiles outside the view are skipped; far tiles draw only
+  their largest buildings; a per-tier budget caps the total (150,000 low,
+  350,000 medium, 600,000 high).
+- Reduced motion: the camera cuts between views and years step one at a
+  time, with no rising animation.
+- New address-bar options: `?buildings=N` (cap buildings per frame),
+  `?holdCamera` (keep the Act 1 end view through Act 2, to compare years).
 
-1. Building renderer (`web/src/buildings/`): one instanced draw call per
-   3.84 km tile. Each instance is a box from the tile data (centre, long and
-   short side, angle, first year, eight heights). The vertex shader places
-   it on the Kigali terrain texture and sets its height from the slider's
-   year, interpolating between the two nearest years; a building grows from
-   the ground during the year before its first year.
-2. Level of detail: tiles outside the view are skipped; each tile draws only
-   its first N buildings (they are stored largest first), with N set by
-   distance and quality tier. Rough budgets to refine by measurement: about
-   150,000 boxes on the low tier, 350,000 on medium, all 825,495 on high.
-3. Look: walls and roofs lit by the same sun; buildings that appeared in
-   the last year carry a warm tint that fades, so growth is visible as a
-   moving front.
-4. Slider and statistics (`web/src/ui/`): a keyboard-operable range input,
-   play and pause, and counters read from `buildings/stats.json`: buildings
-   standing, added since 2016, footprint area. Next to them, the range from
-   the threshold sensitivity table and the rasters' own count, so the
-   uncertainty is on the page.
-5. Story: a second pinned act after Act 1. Scrolling through it moves the
-   year; the slider can also be dragged directly. Camera slowly circles
-   the city.
-6. Tests: year interpolation and growth curve, per-tile draw budget, tile
-   visibility, statistics text against `stats.json`; browser screenshots at
-   2016, 2019.5 and 2023 on both backends and both viewports, checking that
-   more of the frame is built in later years; reduced motion.
-7. Done when: the full city renders at every tier, counts on screen equal
-   the data, tests pass in CI, and headless numbers are recorded with the
-   real-device slot left for the owner.
+### Measured
+| Measure | Value |
+|---|---|
+| Web unit tests | 137 passing, 16 files |
+| Pipeline tests | 73 passing |
+| Browser tests | 31 passing, 5 skipped on the phone viewport (viewport-independent logic runs on desktop only) |
+| JavaScript bundle | 0.87 MB (0.24 MB gzipped) |
+| Data before the first frame | 1.59 MB (unchanged; buildings load later) |
+| Building data | 7.92 MB, loaded in the background |
+| On-screen figures | Equal to `buildings/stats.json` at 2016 and 2023 (tested) |
+| Fixed view, 2016 to 2023 | 2.8% of scene pixels change on desktop, 6.1% on phone; returning to 2016 changes 0.00% |
+
+Screenshots of the city at 2016, 2020 and 2023 on both backends and both
+viewports are saved to `web/test-results/screens/city-*.png` and uploaded
+by CI.
+
+### Not verified, stated plainly
+- Frame rate with real building budgets. The test machines rasterise on
+  the CPU, so tests cap the buildings at 40,000. Whether 150,000 boxes hold
+  30 fps on a mid-range phone, and 600,000 hold 60 fps on a laptop, can
+  only be measured on those devices with `?perf=1`. The budgets are first
+  estimates and are easy to change (`web/src/buildings/buildingLayer.ts`).
+- Buildings pop in and out as the budget is shared out while the camera
+  moves. Not yet judged on a real screen.
+
+### Limits to state on the site (Phase 6), in addition to earlier ones
+- Buildings are boxes with the footprint's area, not its exact outline.
+- The 2016 count depends on how faint buildings are dated (already shown).
+- On low and medium tiers not every mapped building is drawn (already shown).
+
+### What failed or changed along the way
+- The first building shader read the placed position where it needed the
+  box's own 0 to 1 height, which blew the lighting out to white. Found by
+  rendering each lighting term separately.
+- Redrawing after every arriving tile (100 redraws) swamped the software
+  renderer; tiles are now shown in batches at most every 350 ms.
+- The first Act 2 camera was too high for buildings to read; it now flies
+  about 900 m above the ridges.
+- The high tier drew every building with no level of detail; it now has a
+  budget like the others.
+
+## Phase 4 plan proposal: Make It Rain (not yet approved)
+
+Goal: a rainfall control that makes water run down the real terrain into
+the valleys, simulated on the visitor's graphics chip, with tests that
+prove the physics behaves.
+
+1. One specification, three implementations (`web/src/water/`):
+   - The method: local-inertial shallow water (Bates 2010, de Almeida
+     2012). Water depth per cell and flow across each cell edge; Manning
+     friction; a limiter so depth never goes negative; mass conserved by
+     construction.
+   - A plain TypeScript version on the CPU. It is the reference: the unit
+     tests and the later validation runs use it.
+   - WebGPU compute, and a WebGL2 version using float render targets.
+     Browser tests compare both against the CPU reference on a small grid.
+2. Inputs: the Kigali terrain grid (1280 x 1280 at 30 m; 640 x 640 at 60 m
+   on the low tier, stated on screen); uniform rain in mm per hour; simple
+   infiltration by land-cover class (little on built-up ground, none on
+   water); water leaves freely at the grid's edges.
+3. Tests required by the brief: mass conservation within a stated
+   tolerance, still water stays still, water flows downhill on a tilted
+   plane, outflow at the borders. Plus the GPU-against-CPU comparison.
+4. Rendering: water drawn on the terrain with colour by depth, a wet edge,
+   and movement that follows the flow; rain in the air while it falls.
+5. Controls: rainfall slider in mm per hour; three presets (light rain,
+   heavy storm, extreme storm) with their rates taken from a published
+   source for Kigali rainfall, cited; play, pause, reset; simulated time
+   and a running water balance (rained, soaked in, left the grid, on the
+   ground).
+6. The note on screen, always visible in this act: a picture of where
+   water flows on this terrain, not a forecast or a warning; drains and
+   culverts are not modelled; terrain cells are about 30 m. The claims
+   guard gets its first allowlisted disclaimer.
+7. Story: a third pinned act after Act 2, camera over the Nyabugogo valley.
+8. Done when: the four physics tests and the GPU comparison pass in CI on
+   both backends, screenshots show water in the valleys after a heavy
+   storm, and headless numbers are recorded with the real-device slot left
+   for the owner.
+
+Known risk: the simulation is the heaviest thing in the project. Whether
+1280 x 1280 runs at a useful speed on integrated graphics is unknown until
+measured on real devices; the 640 x 640 grid is the fallback.
