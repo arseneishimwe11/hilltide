@@ -3185,13 +3185,13 @@
       "version": 1
     },
     "labels.curated": {
-      "bytes": 1099,
+      "bytes": 1027,
       "info": {
-        "count": 15
+        "count": 14
       },
       "kind": "labels",
       "path": "labels/labels.json",
-      "sha256": "3563aa6d57f06d48b62403b1746a878ac9963061b8cd08d84235e680932b60aa",
+      "sha256": "69718a5e61fa1dd189ce6b1730904ba63fada459cfe92aaec94469430fb346ec",
       "sources": [
         "openstreetmap",
         "esa-worldcover"
@@ -3525,6 +3525,6 @@
       "url": "https://www.openstreetmap.org/copyright"
     }
   },
-  "totalBytes": 12085995,
+  "totalBytes": 12085923,
   "version": 1
 }

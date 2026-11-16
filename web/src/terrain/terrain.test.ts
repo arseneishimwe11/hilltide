@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { HeightField } from "../data/heights";
 import { LandClass } from "../data/landcover";
+import type { LineSet } from "../data/lines";
 import { lightingFor } from "../sky/lighting";
+import { burnLines } from "./burnLines";
 import { hexToLinear, LAND_COLOURS, PALETTE_SIZE, paletteTexels } from "./palette";
 import { buildTerrainTexels } from "./terrainTexels";
 
@@ -52,6 +54,88 @@ describe("terrain texels", () => {
     expect(() => buildTerrainTexels({ ...plane, heights: new Float32Array(5) }, null)).toThrow(
       /does not match/,
     );
+  });
+});
+
+describe("burning lines into the class grid", () => {
+  const grid = { name: "t", xMin: 0, yMax: 300, cell: 30, width: 10, height: 10 };
+  const lineSet = (points: number[][], kind: number): LineSet => ({
+    meta: {
+      origin: [0, 0],
+      unit: 0.1,
+      lineCount: 1,
+      pointCount: points.length,
+      lengthKm: 0,
+      names: [],
+    },
+    positions: Float32Array.from(points.flat()),
+    starts: Int32Array.from([0, points.length]),
+    kind: Uint8Array.from([kind]),
+    names: [""],
+  });
+
+  it("marks every cell a diagonal line crosses, leaving no gaps", () => {
+    const classes = new Uint8Array(100).fill(LandClass.Cropland);
+    const changed = burnLines(
+      classes,
+      grid,
+      lineSet(
+        [
+          [5, 295],
+          [295, 5],
+        ],
+        1,
+      ),
+      new Set([1]),
+      LandClass.Water,
+    );
+    expect(changed).toBeGreaterThanOrEqual(10);
+    for (let i = 0; i < 10; i++) expect(classes[i * 10 + i]).toBe(LandClass.Water); // the diagonal
+    // Each row's marked cells touch the next row's: the river is connected.
+    for (let row = 0; row < 9; row++) {
+      const here = [...classes.subarray(row * 10, row * 10 + 10)]
+        .map((c, i) => (c === LandClass.Water ? i : -1))
+        .filter((i) => i >= 0);
+      const below = [...classes.subarray(row * 10 + 10, row * 10 + 20)]
+        .map((c, i) => (c === LandClass.Water ? i : -1))
+        .filter((i) => i >= 0);
+      expect(here.some((col) => below.some((other) => Math.abs(other - col) <= 1))).toBe(true);
+    }
+  });
+
+  it("skips other kinds and ignores points outside the grid", () => {
+    const classes = new Uint8Array(100).fill(LandClass.Cropland);
+    expect(
+      burnLines(
+        classes,
+        grid,
+        lineSet(
+          [
+            [5, 5],
+            [295, 5],
+          ],
+          2,
+        ),
+        new Set([1]),
+        LandClass.Water,
+      ),
+    ).toBe(0);
+    expect(
+      burnLines(
+        classes,
+        grid,
+        lineSet(
+          [
+            [-500, 150],
+            [800, 150],
+          ],
+          1,
+        ),
+        new Set([1]),
+        LandClass.Water,
+      ),
+    ).toBe(10);
+    expect([...classes.subarray(50, 60)].every((c) => c === LandClass.Water)).toBe(true);
   });
 });
 

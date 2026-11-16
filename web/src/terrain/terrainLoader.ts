@@ -1,8 +1,19 @@
 import type { AssetLoader } from "../data/manifest";
 import type { DecodeRequest, DecodeResponse } from "../workers/decode";
-import { type PreparedTerrain, prepareTerrain } from "./prepare";
+import { type PreparedTerrain, prepareTerrain, type WaterLines } from "./prepare";
 
 export type LevelName = "country" | "region" | "kigali";
+
+/**
+ * Mapped waterways drawn as water on each level: the asset and the kinds
+ * used (1 river, 3 canal). Streams and drains are left out: at these cell
+ * sizes they would be drawn many times wider than they are.
+ */
+const WATER_LINES: Readonly<Record<LevelName, { asset: string; kinds: readonly number[] }>> = {
+  country: { asset: "water.country", kinds: [1] },
+  region: { asset: "water.country", kinds: [1] },
+  kigali: { asset: "water.kigali", kinds: [1, 3] },
+};
 
 /**
  * Loads terrain levels and prepares them off the main thread, so a level
@@ -46,25 +57,33 @@ export class TerrainLoader {
   }
 
   async load(level: LevelName): Promise<PreparedTerrain> {
-    const [heights, cover] = await Promise.all([
+    const waterSource = WATER_LINES[level];
+    const [heights, cover, lines] = await Promise.all([
       this.assets.bytes(`terrain.${level}`),
       this.assets.bytes(`landcover.${level}`),
+      this.assets.bytes(waterSource.asset),
     ]);
+    const water = (): WaterLines[] => [{ data: lines.slice(0), kinds: waterSource.kinds }];
     const worker = this.worker;
-    if (worker === null) return prepareTerrain(heights, cover);
+    if (worker === null) return prepareTerrain(heights, cover, water());
     try {
       // Copies are sent so the originals stay usable for the fallback.
       const request: DecodeRequest = {
         id: this.nextId++,
         heights: heights.slice(0),
         cover: cover.slice(0),
+        water: water(),
       };
       return await new Promise<PreparedTerrain>((resolve, reject) => {
         this.waiting.set(request.id, { resolve, reject });
-        worker.postMessage(request, [request.heights, request.cover as ArrayBuffer]);
+        worker.postMessage(request, [
+          request.heights,
+          request.cover as ArrayBuffer,
+          ...request.water.map((entry) => entry.data),
+        ]);
       });
     } catch {
-      return prepareTerrain(heights, cover);
+      return prepareTerrain(heights, cover, water());
     }
   }
 

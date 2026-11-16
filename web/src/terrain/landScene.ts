@@ -2,13 +2,19 @@ import { dot, float, max, mix, positionWorldDirection, pow, smoothstep, uniform 
 import * as THREE from "three/webgpu";
 import { clamp, type Vec3 } from "../core/math";
 import type { QualitySettings } from "../core/quality";
+import type { DistanceMask } from "../data/mask";
 import type { Lighting } from "../sky/lighting";
 import type { CameraPose } from "../story/cameraPath";
 import { PALETTE_SIZE, paletteTexels } from "./palette";
 import type { PreparedTerrain } from "./prepare";
 import { TerrainLevel } from "./terrainLevel";
 import type { LevelName } from "./terrainLoader";
-import { createTerrainMaterial, SceneUniforms, type TerrainMaterial } from "./terrainMaterial";
+import {
+  type CountryMask,
+  createTerrainMaterial,
+  SceneUniforms,
+  type TerrainMaterial,
+} from "./terrainMaterial";
 
 /** Coarsest to finest. A finer level is drawn on top of the coarser ones. */
 const LEVEL_ORDER: readonly LevelName[] = ["country", "region", "kigali"];
@@ -40,8 +46,11 @@ export class LandScene {
   private quality: QualitySettings;
   private altitudeFactor = 1;
 
-  constructor(quality: QualitySettings) {
+  private readonly mask: CountryMask | null;
+
+  constructor(quality: QualitySettings, mask: DistanceMask | null) {
     this.quality = quality;
+    this.mask = mask === null ? null : LandScene.maskTexture(mask);
     this.camera.up.set(0, 0, 1);
     this.palette = new THREE.DataTexture(
       paletteTexels(),
@@ -54,6 +63,34 @@ export class LandScene {
     this.palette.magFilter = THREE.NearestFilter;
     this.palette.needsUpdate = true;
     this.scene.backgroundNode = this.skyNode();
+  }
+
+  private static maskTexture(mask: DistanceMask): CountryMask {
+    const { grid } = mask;
+    const texture = new THREE.DataTexture(
+      mask.values,
+      grid.width,
+      grid.height,
+      THREE.RedFormat,
+      THREE.UnsignedByteType,
+    );
+    // Smoothly interpolated: the border line stays clean at any zoom.
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+    texture.colorSpace = THREE.NoColorSpace;
+    texture.needsUpdate = true;
+    return {
+      texture,
+      placement: new THREE.Vector4(
+        grid.xMin,
+        grid.yMax,
+        grid.width * grid.cell,
+        grid.height * grid.cell,
+      ),
+      zero: mask.zero,
+      stepsPerKm: mask.stepsPerKm,
+    };
   }
 
   /** Sky by view direction: zenith to horizon above, haze fading to the void below. */
@@ -103,7 +140,7 @@ export class LandScene {
       entry.shader.material.dispose();
     }
     const parent = this.parentOf(entry.name);
-    entry.shader = createTerrainMaterial(entry.level, this.palette, this.uniforms, {
+    entry.shader = createTerrainMaterial(entry.level, this.palette, this.uniforms, this.mask, {
       parent: parent?.level ?? null,
       blendBand: BLEND_BAND[entry.name],
       shadowSteps: this.quality.shadowSteps,
@@ -158,6 +195,11 @@ export class LandScene {
     this.updateVoid();
   }
 
+  /** 0 near the ground, 1 from orbit: how high the camera is, on a logarithmic scale. */
+  get altitude01(): number {
+    return this.altitudeFactor;
+  }
+
   /** Terrain height under a point, from the finest loaded level that covers it. */
   groundAt(x: number, y: number): number {
     for (let i = LEVEL_ORDER.length - 1; i >= 0; i--) {
@@ -197,6 +239,9 @@ export class LandScene {
     // From far above, true relief is invisible: strengthen the shading only (never the shape).
     u.reliefBoost.value = 1.3 + 2.3 * high;
     u.glintStrength.value = 0.7 * (1 - high) + 0.04;
+    u.countryFocus.value = clamp((high - 0.45) / 0.4, 0, 1);
+    // About two pixels wide whatever the altitude, within sensible limits.
+    u.borderWidthKm.value = clamp(altitude / 520_000, 0.25, 0.8);
     this.updateVoid();
   }
 
@@ -222,5 +267,6 @@ export class LandScene {
       entry.level.dispose();
     }
     this.palette.dispose();
+    this.mask?.texture.dispose();
   }
 }

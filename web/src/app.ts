@@ -1,8 +1,10 @@
+import { Matrix4 } from "three/webgpu";
 import { t } from "./core/i18n";
 import { initialTier, QualityScaler, type QualityState, TIERS, type Tier } from "./core/quality";
 import { createRenderer, graphicsSupport, type RenderContext } from "./core/renderer";
 import { siteConfig } from "./core/siteConfig";
 import { AssetLoader } from "./data/manifest";
+import { decodeMask } from "./data/mask";
 import { FrameStats, type FrameSummary } from "./perf/frameStats";
 import { PerfOverlay, type PerfReport } from "./perf/overlay";
 import { lightingFor } from "./sky/lighting";
@@ -14,12 +16,15 @@ import {
   nearestKeyTime,
   poseDistance,
   samplePath,
+  shiftBesideText,
   tiltForPortrait,
 } from "./story/cameraPath";
 import { KIGALI_CENTRE, LAND_CHAPTERS, LAND_KEYS } from "./story/landStory";
 import { scrollForProgress, sectionProgress } from "./story/scroll";
 import { LandScene } from "./terrain/landScene";
 import { type LevelName, TerrainLoader } from "./terrain/terrainLoader";
+import { EARTH_RADIUS } from "./terrain/terrainMaterial";
+import { LabelLayer, type PlaceLabel } from "./ui/labelLayer";
 import { StoryView } from "./ui/storyView";
 
 /** What the page exposes for tests and for measuring on real devices. */
@@ -108,16 +113,22 @@ export async function startApp(root: HTMLElement): Promise<void> {
     return;
   }
 
+  let dirty = true;
+  const requestRender = (): void => {
+    dirty = true;
+  };
   let context: RenderContext;
   let land: LandScene;
   let loader: TerrainLoader;
+  let labels: LabelLayer | null = null;
   try {
     const assets = await AssetLoader.open(`${import.meta.env.BASE_URL}data/`);
     loader = new TerrainLoader(assets);
     const forceWebGL = params.get("backend") === "webgl2";
-    const [created, country] = await Promise.all([
+    const [created, country, mask] = await Promise.all([
       createRenderer(view.canvas, { forceWebGL }),
       loader.load("country"),
+      assets.bytes("border.mask").then(decodeMask),
     ]);
     context = created;
     state.backend = context.backend;
@@ -134,8 +145,16 @@ export async function startApp(root: HTMLElement): Promise<void> {
           softwareRenderer: context.softwareRenderer,
         });
     state.quality = { tier, resolutionScale: 1 };
-    land = new LandScene(TIERS[tier]);
+    land = new LandScene(TIERS[tier], mask);
     land.addLevel("country", country);
+    // Labels are a nicety: the scene starts without waiting for them.
+    void assets
+      .json<PlaceLabel[]>("labels.curated")
+      .then((list) => {
+        labels = new LabelLayer(root, view.canvas.nextElementSibling, list);
+        requestRender();
+      })
+      .catch((error) => console.error(error));
   } catch (error) {
     console.error(error);
     state.failed = String(error);
@@ -150,7 +169,6 @@ export async function startApp(root: HTMLElement): Promise<void> {
     : new QualityScaler(state.quality.tier, { ceiling: state.quality.tier });
   const perf = params.has("perf") ? new PerfOverlay(root) : null;
 
-  let dirty = true;
   let loading = false;
 
   // --- Size and resolution ----------------------------------------------------
@@ -206,9 +224,10 @@ export async function startApp(root: HTMLElement): Promise<void> {
   };
   const goalFor = (progress: number): CameraPose => {
     const along = reducedMotion ? nearestKeyTime(LAND_KEYS, progress) : progress;
-    const framed = tiltForPortrait(
-      samplePath(LAND_KEYS, along),
-      window.innerWidth / window.innerHeight,
+    const aspect = window.innerWidth / window.innerHeight;
+    const framed = shiftBesideText(
+      tiltForPortrait(samplePath(LAND_KEYS, along), aspect, land.camera.fov),
+      aspect,
       land.camera.fov,
     );
     return keepAboveGround(framed, (x, y) => land.groundAt(x, y), CAMERA_CLEARANCE);
@@ -247,6 +266,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
   };
 
   // --- Frame loop -----------------------------------------------------------------
+  const viewProjection = new Matrix4();
   let last = performance.now();
   let lastRendered = false;
   let perfUpdated = 0;
@@ -274,6 +294,21 @@ export async function startApp(root: HTMLElement): Promise<void> {
       land.setCamera(pose, window.innerWidth / window.innerHeight);
       renderer.render(land.scene, land.camera);
       state.renderedFrames++;
+      labels?.update({
+        viewProjection: viewProjection.multiplyMatrices(
+          land.camera.projectionMatrix,
+          land.camera.matrixWorldInverse,
+        ).elements,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        altitude01: land.altitude01,
+        // Labels sit on the drawn ground, which curves away from the camera.
+        groundAt: (x, y) => {
+          const dx = x - pose.position[0];
+          const dy = y - pose.position[1];
+          return land.groundAt(x, y) - (dx * dx + dy * dy) / (2 * EARTH_RADIUS);
+        },
+      });
       // Frame times only count while frames follow one another without a pause.
       if (lastRendered) {
         stats.record(elapsed);

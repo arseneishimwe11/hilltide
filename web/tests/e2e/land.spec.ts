@@ -107,6 +107,29 @@ test("the performance overlay reports the device and measured frame times", asyn
   await expect(panel).toContainText(/first frame \d+ ms/);
 });
 
+for (const backend of ["webgl2", "webgpu"] as const) {
+  test(`frame times on ${backend}, software rendering (recorded, not judged)`, async ({
+    page,
+  }, testInfo) => {
+    // One viewport is enough for a record, and software WebGPU takes minutes.
+    test.skip(testInfo.project.name !== "desktop", "recorded on the desktop viewport only");
+    // Continuous rendering for a few seconds at the opening view and over Kigali.
+    // These numbers come from a CPU rasteriser; they say nothing about a real GPU.
+    await openScene(page, { backend, extra: "still&perf=1" });
+    for (const stop of [0, 1]) {
+      await goToProgress(page, stop);
+      await page.waitForTimeout(6000);
+      const frames = await page.evaluate(() => window.__hilltide?.frames());
+      if (frames === undefined) throw new Error("no frame statistics");
+      console.log(
+        `frame times ${testInfo.project.name} ${backend} at ${stop}: median ${frames.medianMs.toFixed(0)} ms, ` +
+          `p95 ${frames.p95Ms.toFixed(0)} ms, ${frames.fps.toFixed(1)} fps over ${frames.frames} frames`,
+      );
+      expect(frames.frames).toBeGreaterThan(2);
+    }
+  });
+}
+
 test("a browser without WebGPU or WebGL2 gets a clear message, not a blank page", async ({
   page,
 }) => {

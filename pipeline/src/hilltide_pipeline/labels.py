@@ -48,7 +48,6 @@ FEATURES: tuple[Feature, ...] = (
 #: Places taken from OpenStreetMap: (name in OSM, label text, level, kinds accepted).
 OSM_PLACES: tuple[tuple[str, str, str, tuple[str, ...]], ...] = (
     ("Kigali", "Kigali", COUNTRY, ("city",)),
-    ("Musanze", "Musanze", COUNTRY, ("city", "town")),
     ("Huye", "Huye", COUNTRY, ("city", "town")),
     ("Mount Karisimbi", "Karisimbi", COUNTRY, ("peak",)),
     ("Kigali", "Kigali", KIGALI, ("city",)),

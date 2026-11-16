@@ -141,3 +141,32 @@ export function tiltForPortrait(pose: CameraPose, aspect: number, fovDegrees: nu
   const height = pose.position[2] - ground * Math.tan(tilted);
   return { position: pose.position, target: [pose.target[0], pose.target[1], height] };
 }
+
+/**
+ * On wide screens the story text sits on the left, so the subject is moved
+ * to the right of it: the whole view slides west by a share of its width.
+ * Applies only to steep, high views (the opening); low views are unchanged.
+ * `share` is the fraction of the visible width to shift by.
+ */
+export function shiftBesideText(
+  pose: CameraPose,
+  aspect: number,
+  fovDegrees: number,
+  share = 0.14,
+): CameraPose {
+  if (aspect <= 1.15) return pose;
+  const dx = pose.target[0] - pose.position[0];
+  const dy = pose.target[1] - pose.position[1];
+  const dz = pose.position[2] - pose.target[2];
+  const distance = Math.hypot(dx, dy, dz);
+  if (distance <= 0 || dz <= 0) return pose;
+  // 1 when looking straight down, fading to 0 by 45 degrees of pitch.
+  const steep = clamp((dz / distance - Math.SQRT1_2) / (1 - Math.SQRT1_2), 0, 1);
+  if (steep === 0) return pose;
+  const visibleWidth = 2 * distance * Math.tan((fovDegrees * Math.PI) / 360) * aspect;
+  const shift = -visibleWidth * share * steep * clamp((aspect - 1.15) / 0.35, 0, 1);
+  return {
+    position: [pose.position[0] + shift, pose.position[1], pose.position[2]],
+    target: [pose.target[0] + shift, pose.target[1], pose.target[2]],
+  };
+}

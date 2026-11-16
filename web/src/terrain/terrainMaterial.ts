@@ -20,6 +20,7 @@ import {
   pow,
   reflect,
   smoothstep,
+  texture,
   textureLoad,
   uniform,
   varying,
@@ -65,6 +66,22 @@ export class SceneUniforms {
   readonly edgeFade = uniform(1);
   /** Strength of the sun's glint on water; small from orbit, where it would cover a whole lake. */
   readonly glintStrength = uniform(0.6);
+  /**
+   * 0 to 1: how strongly Rwanda is set apart from its neighbours (border
+   * line, dimmed surroundings). Full from orbit, none among the hills.
+   */
+  readonly countryFocus = uniform(1);
+  /** Half-width of the border line in km; grows with altitude to stay about as wide on screen. */
+  readonly borderWidthKm = uniform(1.2);
+}
+
+/** The signed distance to the Rwanda border as a texture, with where it sits on the ground. */
+export interface CountryMask {
+  readonly texture: THREE.DataTexture;
+  /** (xMin, yMax, width in metres, height in metres) of the mask grid. */
+  readonly placement: THREE.Vector4;
+  readonly zero: number;
+  readonly stepsPerKm: number;
 }
 
 /** Drop in metres at a ground position caused by the Earth's curvature. */
@@ -152,6 +169,7 @@ export function createTerrainMaterial(
   level: TerrainLevel,
   palette: THREE.DataTexture,
   scene: SceneUniforms,
+  mask: CountryMask | null,
   options: TerrainMaterialOptions,
 ): TerrainMaterial {
   const extent = uniform(level.extent);
@@ -276,10 +294,29 @@ export function createTerrainMaterial(
     const hazeTint = mix(scene.hazeColour, scene.skyHorizon, smoothstep(0.5, 0.95, haze));
     const hazed = mix(surfaceColour, hazeTint, haze);
 
-    let finalColour: V3 = hazed;
+    // Rwanda apart from its neighbours, when seen from high above: the surroundings are
+    // dimmed and drained of colour, a pale line follows the border, and far land fades out.
+    let focused: V3 = hazed;
+    if (mask !== null) {
+      const place = uniform(mask.placement);
+      const uv = vec2(xy.x.sub(place.x).div(place.z), place.y.sub(xy.y).div(place.w));
+      const stored = texture(mask.texture, clamp(uv, vec2(0, 0), vec2(1, 1))).x.mul(255);
+      const distanceKm = stored.sub(mask.zero).div(mask.stepsPerKm);
+      const outside = smoothstep(0, -14, distanceKm).mul(scene.countryFocus);
+      const grey = vec3(dot(hazed, vec3(0.2126, 0.7152, 0.0722)));
+      const dimmed = mix(hazed, grey, 0.7).mul(0.5);
+      const line = float(1)
+        .sub(smoothstep(scene.borderWidthKm.mul(0.4), scene.borderWidthKm, distanceKm.abs()))
+        .mul(scene.countryFocus);
+      const withLine = mix(mix(hazed, dimmed, outside), vec3(0.86, 0.84, 0.74), line.mul(0.42));
+      const gone = smoothstep(-9, -24, distanceKm).mul(scene.countryFocus);
+      focused = mix(withLine, scene.voidColour, gone);
+    }
+
+    let finalColour: V3 = focused;
     if (options.fadeAtEdge) {
       const edge = smoothstep(0, 30_000, insideDistance(xy, extent));
-      finalColour = mix(scene.voidColour, hazed, mix(float(1), edge, scene.edgeFade));
+      finalColour = mix(scene.voidColour, focused, mix(float(1), edge, scene.edgeFade));
     }
     return vec4(finalColour, 1);
   })();

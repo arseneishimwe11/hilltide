@@ -6,6 +6,7 @@ import {
   nearestKeyTime,
   poseDistance,
   samplePath,
+  shiftBesideText,
   tiltForPortrait,
 } from "./cameraPath";
 import {
@@ -138,6 +139,32 @@ describe("portrait framing", () => {
     const tilted = tiltForPortrait(steep, 0.45, 38);
     expect(Number.isFinite(tilted.target[2])).toBe(true);
     expect(tilted.target[2]).toBeLessThan(steep.position[2]);
+  });
+});
+
+describe("framing beside the text", () => {
+  const opening = { position: [0, -40_000, 330_000], target: [0, 0, 1500] } as const;
+  const low = { position: [0, 0, 5000], target: [10_000, 0, 1500] } as const;
+
+  it("slides a steep, high view west on wide screens so the subject sits to the right", () => {
+    const shifted = shiftBesideText(opening, 1.6, 38);
+    expect(shifted.position[0]).toBeLessThan(-30_000);
+    expect(shifted.position[0]).toBe(shifted.target[0]); // the whole view moves together
+    expect(shifted.position[1]).toBe(opening.position[1]);
+    expect(shifted.position[2]).toBe(opening.position[2]);
+  });
+
+  it("leaves portrait screens and low views alone", () => {
+    expect(shiftBesideText(opening, 0.5, 38)).toBe(opening);
+    expect(shiftBesideText(opening, 1.1, 38)).toBe(opening);
+    expect(shiftBesideText(low, 1.6, 38)).toBe(low);
+  });
+
+  it("grows smoothly with screen width, without a jump", () => {
+    const at = (aspect: number): number => shiftBesideText(opening, aspect, 38).position[0];
+    expect(Math.abs(at(1.16))).toBeLessThan(2000);
+    expect(at(1.3)).toBeLessThan(at(1.2));
+    expect(at(1.6)).toBeLessThan(at(1.3));
   });
 });
 

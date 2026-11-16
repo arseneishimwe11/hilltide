@@ -1,10 +1,11 @@
 /// <reference lib="webworker" />
-import { type PreparedTerrain, prepareTerrain } from "../terrain/prepare";
+import { type PreparedTerrain, prepareTerrain, type WaterLines } from "../terrain/prepare";
 
 export interface DecodeRequest {
   readonly id: number;
   readonly heights: ArrayBuffer;
   readonly cover: ArrayBuffer | null;
+  readonly water: readonly WaterLines[];
 }
 
 export type DecodeResponse =
@@ -12,9 +13,9 @@ export type DecodeResponse =
   | { readonly id: number; readonly ok: false; readonly error: string };
 
 self.onmessage = async (event: MessageEvent<DecodeRequest>) => {
-  const { id, heights, cover } = event.data;
+  const { id, heights, cover, water } = event.data;
   try {
-    const terrain = await prepareTerrain(heights, cover);
+    const terrain = await prepareTerrain(heights, cover, water);
     const response: DecodeResponse = { id, ok: true, terrain };
     self.postMessage(response, [terrain.heights.buffer, terrain.texels.buffer]);
   } catch (error) {
