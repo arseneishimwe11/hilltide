@@ -45,6 +45,3122 @@
       ],
       "version": 1
     },
+    "buildings.stats": {
+      "bytes": 15366,
+      "info": {
+        "buildings": 825495,
+        "tiles": 100
+      },
+      "kind": "building-stats",
+      "path": "buildings/stats.json",
+      "sha256": "d2baac6c6cdcddccc3af35077388b1a8de23651b4523d43edc5c134b4ea9b4f0",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal",
+        "openstreetmap"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.0": {
+      "bytes": 17488,
+      "info": {
+        "col": 0,
+        "count": 1791,
+        "countByFirstYear": [
+          1225,
+          83,
+          53,
+          102,
+          88,
+          140,
+          83,
+          17
+        ],
+        "maxHeight": 7.4,
+        "origin": [
+          -4800.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_0.hlt",
+      "sha256": "aab3dabddb9889c6734d0fa2b1cd1f249739d4f5c7675b75d69c6ccbd6439779",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.1": {
+      "bytes": 28633,
+      "info": {
+        "col": 0,
+        "count": 2941,
+        "countByFirstYear": [
+          1966,
+          143,
+          111,
+          153,
+          152,
+          216,
+          151,
+          49
+        ],
+        "maxHeight": 8.1,
+        "origin": [
+          -4800.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_1.hlt",
+      "sha256": "9fec3c6c060b897127b4c8d27168baeef3c5b9b25b39dbd17b5d7c25a0a16d44",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.2": {
+      "bytes": 60191,
+      "info": {
+        "col": 0,
+        "count": 6293,
+        "countByFirstYear": [
+          3105,
+          412,
+          430,
+          526,
+          530,
+          620,
+          561,
+          109
+        ],
+        "maxHeight": 9.1,
+        "origin": [
+          -4800.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_2.hlt",
+      "sha256": "264f79d6e89b4d0553e6fd7ebdec1f5b79226e3615b5abbac3ff73b32b4501d5",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.3": {
+      "bytes": 95223,
+      "info": {
+        "col": 0,
+        "count": 9761,
+        "countByFirstYear": [
+          4574,
+          803,
+          648,
+          740,
+          704,
+          1011,
+          992,
+          289
+        ],
+        "maxHeight": 15.7,
+        "origin": [
+          -4800.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_3.hlt",
+      "sha256": "2852031d73ed1e753a6cf174209745a695f9e57e01cf6c1db82f1b5971180504",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.4": {
+      "bytes": 126116,
+      "info": {
+        "col": 0,
+        "count": 13028,
+        "countByFirstYear": [
+          6391,
+          1155,
+          921,
+          895,
+          915,
+          1177,
+          1266,
+          308
+        ],
+        "maxHeight": 15.0,
+        "origin": [
+          -4800.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_4.hlt",
+      "sha256": "4797660b3a1d39029c4b7641817c5c67bfab26bc399cf17bd87de04e7678327e",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.5": {
+      "bytes": 94893,
+      "info": {
+        "col": 0,
+        "count": 9807,
+        "countByFirstYear": [
+          4347,
+          1121,
+          976,
+          1021,
+          664,
+          798,
+          681,
+          199
+        ],
+        "maxHeight": 10.3,
+        "origin": [
+          -4800.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_5.hlt",
+      "sha256": "536e8ee565af36d6a5468a0aaa3da44284c84214e6c225aad3dcc07635d14117",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.6": {
+      "bytes": 50282,
+      "info": {
+        "col": 0,
+        "count": 5180,
+        "countByFirstYear": [
+          3052,
+          357,
+          323,
+          416,
+          330,
+          352,
+          280,
+          70
+        ],
+        "maxHeight": 9.4,
+        "origin": [
+          -4800.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_6.hlt",
+      "sha256": "b5505b706b1b9676f7787550350738989201d4882ce4639b372ca11dc6377b65",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.7": {
+      "bytes": 45429,
+      "info": {
+        "col": 0,
+        "count": 4713,
+        "countByFirstYear": [
+          2985,
+          269,
+          239,
+          349,
+          288,
+          294,
+          219,
+          70
+        ],
+        "maxHeight": 9.4,
+        "origin": [
+          -4800.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_7.hlt",
+      "sha256": "208f7734584a41edd2130fdb2b77df09ce0a43db53f7ebd2b8577a94d693decd",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.8": {
+      "bytes": 27099,
+      "info": {
+        "col": 0,
+        "count": 2783,
+        "countByFirstYear": [
+          1755,
+          195,
+          129,
+          203,
+          177,
+          156,
+          124,
+          44
+        ],
+        "maxHeight": 8.2,
+        "origin": [
+          -4800.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_8.hlt",
+      "sha256": "cb382ad40beead2c4ff0bbca9a37fb5fb4b78fbe70fde2c08f06d748763ad758",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.0.9": {
+      "bytes": 21881,
+      "info": {
+        "col": 0,
+        "count": 2192,
+        "countByFirstYear": [
+          1538,
+          127,
+          101,
+          130,
+          86,
+          111,
+          73,
+          26
+        ],
+        "maxHeight": 11.0,
+        "origin": [
+          -4800.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_0_9.hlt",
+      "sha256": "e34c94ec75d67e205f8e090644487c5c05d0f4381d27089618eb91785080051f",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.0": {
+      "bytes": 15636,
+      "info": {
+        "col": 1,
+        "count": 1555,
+        "countByFirstYear": [
+          1010,
+          85,
+          48,
+          95,
+          88,
+          102,
+          105,
+          22
+        ],
+        "maxHeight": 6.8,
+        "origin": [
+          -960.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_0.hlt",
+      "sha256": "61bcf5c16ec63076d8ab9c6b590410b727a520fb3ab4233f31dae331ff69b63c",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.1": {
+      "bytes": 30648,
+      "info": {
+        "col": 1,
+        "count": 3188,
+        "countByFirstYear": [
+          2050,
+          138,
+          134,
+          161,
+          181,
+          269,
+          206,
+          49
+        ],
+        "maxHeight": 10.5,
+        "origin": [
+          -960.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_1.hlt",
+      "sha256": "01db57bb947fdab8c96906bb295c811eca752a880eafd339b33661b72c70efea",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.2": {
+      "bytes": 40563,
+      "info": {
+        "col": 1,
+        "count": 4205,
+        "countByFirstYear": [
+          2128,
+          263,
+          219,
+          278,
+          288,
+          462,
+          467,
+          100
+        ],
+        "maxHeight": 10.8,
+        "origin": [
+          -960.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_2.hlt",
+      "sha256": "43eed8c04076b8d42699c4bebe21772b5d5a13a5741537644b88d6edfde812f2",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.3": {
+      "bytes": 57762,
+      "info": {
+        "col": 1,
+        "count": 6055,
+        "countByFirstYear": [
+          3147,
+          385,
+          328,
+          248,
+          316,
+          605,
+          770,
+          256
+        ],
+        "maxHeight": 10.4,
+        "origin": [
+          -960.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_3.hlt",
+      "sha256": "8efa620020e91f53eb0f2e119028b883b9fcf6af21f79ab2ddd4c555e7fbbed4",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.4": {
+      "bytes": 103205,
+      "info": {
+        "col": 1,
+        "count": 10546,
+        "countByFirstYear": [
+          5881,
+          768,
+          603,
+          574,
+          551,
+          950,
+          927,
+          292
+        ],
+        "maxHeight": 14.1,
+        "origin": [
+          -960.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_4.hlt",
+      "sha256": "ea3b02ccc03151fecc252961ae9568c61bbf2c90ace01b5726dd71e66ff21db5",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.5": {
+      "bytes": 45922,
+      "info": {
+        "col": 1,
+        "count": 4764,
+        "countByFirstYear": [
+          2953,
+          284,
+          245,
+          232,
+          196,
+          438,
+          330,
+          86
+        ],
+        "maxHeight": 10.5,
+        "origin": [
+          -960.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_5.hlt",
+      "sha256": "6c9ea7b5a1723937ceb416f849602f0dd9551359447671a63df8398289682b12",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.6": {
+      "bytes": 28808,
+      "info": {
+        "col": 1,
+        "count": 2940,
+        "countByFirstYear": [
+          2065,
+          112,
+          68,
+          111,
+          96,
+          272,
+          186,
+          30
+        ],
+        "maxHeight": 8.6,
+        "origin": [
+          -960.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_6.hlt",
+      "sha256": "249460d8005845b254ea2f6f836a5d4d8b989516d23504347b6ab25f96ee13fa",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.7": {
+      "bytes": 32923,
+      "info": {
+        "col": 1,
+        "count": 3453,
+        "countByFirstYear": [
+          2353,
+          153,
+          127,
+          156,
+          148,
+          261,
+          210,
+          45
+        ],
+        "maxHeight": 8.4,
+        "origin": [
+          -960.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_7.hlt",
+      "sha256": "cdf24681aabaeeadd65e9869e80dd2a3fcc5d54aaff572e4b27befe407dbbb1e",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.8": {
+      "bytes": 23092,
+      "info": {
+        "col": 1,
+        "count": 2321,
+        "countByFirstYear": [
+          1687,
+          122,
+          76,
+          134,
+          100,
+          102,
+          78,
+          22
+        ],
+        "maxHeight": 7.3,
+        "origin": [
+          -960.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_8.hlt",
+      "sha256": "b47a4d14726758922e1e12c84c78711a21ea4efbaa65b1e6900ce171645335f2",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.1.9": {
+      "bytes": 27657,
+      "info": {
+        "col": 1,
+        "count": 2788,
+        "countByFirstYear": [
+          1998,
+          137,
+          107,
+          141,
+          144,
+          103,
+          115,
+          43
+        ],
+        "maxHeight": 9.9,
+        "origin": [
+          -960.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_1_9.hlt",
+      "sha256": "26b40c76208423dfa7874e7e74f5c371191a04520d7ba7c766bf4080683ae62b",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.0": {
+      "bytes": 41703,
+      "info": {
+        "col": 2,
+        "count": 4360,
+        "countByFirstYear": [
+          2038,
+          352,
+          250,
+          353,
+          382,
+          481,
+          413,
+          91
+        ],
+        "maxHeight": 9.2,
+        "origin": [
+          2880.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_0.hlt",
+      "sha256": "29c1987c2350b20811f4bf0a29bfcb87c10f310d4d15f3705d6075ad63bc109c",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.1": {
+      "bytes": 38164,
+      "info": {
+        "col": 2,
+        "count": 3985,
+        "countByFirstYear": [
+          2390,
+          204,
+          185,
+          162,
+          255,
+          369,
+          341,
+          79
+        ],
+        "maxHeight": 11.5,
+        "origin": [
+          2880.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_1.hlt",
+      "sha256": "7ea92ecdd0898f8689dc8d30db95f9cae6eb732df26bdadb2eff625e86f24df6",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.2": {
+      "bytes": 93589,
+      "info": {
+        "col": 2,
+        "count": 9970,
+        "countByFirstYear": [
+          4938,
+          731,
+          571,
+          533,
+          683,
+          1065,
+          1161,
+          288
+        ],
+        "maxHeight": 11.3,
+        "origin": [
+          2880.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_2.hlt",
+      "sha256": "db4d08e915793fbdbb4bc0062e25ca66e969da81e86c129f146397f67c9d447a",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.3": {
+      "bytes": 294916,
+      "info": {
+        "col": 2,
+        "count": 31129,
+        "countByFirstYear": [
+          24809,
+          1480,
+          813,
+          753,
+          776,
+          1040,
+          1068,
+          390
+        ],
+        "maxHeight": 18.6,
+        "origin": [
+          2880.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_3.hlt",
+      "sha256": "c3888b2018d4b3629c40baad22de04d5f4ed034bc07075234a9750a67c428686",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.4": {
+      "bytes": 317242,
+      "info": {
+        "col": 2,
+        "count": 33161,
+        "countByFirstYear": [
+          29160,
+          973,
+          458,
+          433,
+          459,
+          614,
+          754,
+          310
+        ],
+        "maxHeight": 67.2,
+        "origin": [
+          2880.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_4.hlt",
+      "sha256": "3bc9008f33cf33607d169fe2689fa35aa578e2ed9cf0ad461d1c08401c6426a9",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.5": {
+      "bytes": 207576,
+      "info": {
+        "col": 2,
+        "count": 21591,
+        "countByFirstYear": [
+          15864,
+          1099,
+          733,
+          715,
+          585,
+          1235,
+          1073,
+          287
+        ],
+        "maxHeight": 23.7,
+        "origin": [
+          2880.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_5.hlt",
+      "sha256": "219d8c2a864d9e3be75b95b3878182d2eb5c2f0a5727e426950ac063c682b8e7",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.6": {
+      "bytes": 139350,
+      "info": {
+        "col": 2,
+        "count": 14877,
+        "countByFirstYear": [
+          7672,
+          738,
+          767,
+          829,
+          661,
+          1841,
+          1908,
+          461
+        ],
+        "maxHeight": 10.8,
+        "origin": [
+          2880.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_6.hlt",
+      "sha256": "07f40b98c8ae9916066c68fad77da5240329c95db6653d4bbac541b5f80fadbd",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.7": {
+      "bytes": 83862,
+      "info": {
+        "col": 2,
+        "count": 8944,
+        "countByFirstYear": [
+          4831,
+          666,
+          690,
+          644,
+          341,
+          727,
+          811,
+          234
+        ],
+        "maxHeight": 10.1,
+        "origin": [
+          2880.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_7.hlt",
+      "sha256": "429b03eea7199dcecb1a08e17760f680d8b843dda8c8d1da5af6fdac3d52b8e0",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.8": {
+      "bytes": 45220,
+      "info": {
+        "col": 2,
+        "count": 4671,
+        "countByFirstYear": [
+          3274,
+          259,
+          195,
+          292,
+          183,
+          231,
+          190,
+          47
+        ],
+        "maxHeight": 9.5,
+        "origin": [
+          2880.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_8.hlt",
+      "sha256": "1755124dd1da3629424e73914ccd4d7db1ba37c76a61a5602c9436b895562e26",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.2.9": {
+      "bytes": 47350,
+      "info": {
+        "col": 2,
+        "count": 5035,
+        "countByFirstYear": [
+          3459,
+          274,
+          217,
+          336,
+          201,
+          239,
+          208,
+          101
+        ],
+        "maxHeight": 10.4,
+        "origin": [
+          2880.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_2_9.hlt",
+      "sha256": "156d0ef2187bba5ddd7b4ec87bcaae9688f60ab60ff5d248329f179f6b2ef578",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.0": {
+      "bytes": 70992,
+      "info": {
+        "col": 3,
+        "count": 7255,
+        "countByFirstYear": [
+          2911,
+          735,
+          715,
+          705,
+          595,
+          731,
+          732,
+          131
+        ],
+        "maxHeight": 12.3,
+        "origin": [
+          6720.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_0.hlt",
+      "sha256": "a583f8e93bf6bf350d2ec57c45545277748a751b130613b0d948e84a965ba20b",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.1": {
+      "bytes": 62141,
+      "info": {
+        "col": 3,
+        "count": 6568,
+        "countByFirstYear": [
+          3400,
+          616,
+          360,
+          388,
+          466,
+          602,
+          589,
+          147
+        ],
+        "maxHeight": 12.8,
+        "origin": [
+          6720.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_1.hlt",
+      "sha256": "e129287b65e1b05494c838f321f0449c7eec9b236aecde08a3a53790f7ad41df",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.2": {
+      "bytes": 135670,
+      "info": {
+        "col": 3,
+        "count": 14336,
+        "countByFirstYear": [
+          6352,
+          1170,
+          897,
+          1017,
+          1314,
+          1641,
+          1481,
+          464
+        ],
+        "maxHeight": 17.7,
+        "origin": [
+          6720.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_2.hlt",
+      "sha256": "81d7086c9d6ee39d1710e7183b2e5ead9f04a132f8b1e4eb9c577a7b0ca25ff2",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.3": {
+      "bytes": 304560,
+      "info": {
+        "col": 3,
+        "count": 31953,
+        "countByFirstYear": [
+          25642,
+          1404,
+          881,
+          753,
+          902,
+          934,
+          914,
+          523
+        ],
+        "maxHeight": 21.9,
+        "origin": [
+          6720.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_3.hlt",
+      "sha256": "936068d1d66a7f6b798f69b854d80a820572c4dfe7ca854192c14ddff87bb5ec",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.4": {
+      "bytes": 190705,
+      "info": {
+        "col": 3,
+        "count": 19033,
+        "countByFirstYear": [
+          16679,
+          620,
+          334,
+          273,
+          327,
+          315,
+          308,
+          177
+        ],
+        "maxHeight": 72.2,
+        "origin": [
+          6720.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_4.hlt",
+      "sha256": "739e7a8aa9f63b9fc628890cd4ffb8fc8a9d19a2cbc611d2be4919bf4244d52b",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.5": {
+      "bytes": 299456,
+      "info": {
+        "col": 3,
+        "count": 31003,
+        "countByFirstYear": [
+          23249,
+          1922,
+          1134,
+          1010,
+          870,
+          1113,
+          1128,
+          577
+        ],
+        "maxHeight": 22.8,
+        "origin": [
+          6720.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_5.hlt",
+      "sha256": "14f69e75ffb06033b90e51c6668bb7e3b1064cde9651e774c7bb7bd8d60125cd",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.6": {
+      "bytes": 129392,
+      "info": {
+        "col": 3,
+        "count": 13443,
+        "countByFirstYear": [
+          7818,
+          798,
+          731,
+          727,
+          678,
+          1051,
+          1266,
+          374
+        ],
+        "maxHeight": 17.7,
+        "origin": [
+          6720.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_6.hlt",
+      "sha256": "ddb0362a25c2928714efb526b779615862179f870c94b7bd30a7aa757207df65",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.7": {
+      "bytes": 64785,
+      "info": {
+        "col": 3,
+        "count": 6932,
+        "countByFirstYear": [
+          3956,
+          373,
+          389,
+          443,
+          337,
+          545,
+          732,
+          157
+        ],
+        "maxHeight": 7.8,
+        "origin": [
+          6720.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_7.hlt",
+      "sha256": "e6543c5ee6dc481be9a4fb27f2cc5395d2746a9568047823a501928630a1322c",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.8": {
+      "bytes": 58835,
+      "info": {
+        "col": 3,
+        "count": 6204,
+        "countByFirstYear": [
+          3810,
+          392,
+          307,
+          426,
+          362,
+          403,
+          383,
+          121
+        ],
+        "maxHeight": 8.0,
+        "origin": [
+          6720.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_8.hlt",
+      "sha256": "34e26fd35d15f643a61e5c33693e3e1171d8af0002b38ea3b4358218fe2132c7",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.3.9": {
+      "bytes": 42592,
+      "info": {
+        "col": 3,
+        "count": 4512,
+        "countByFirstYear": [
+          2955,
+          323,
+          188,
+          242,
+          205,
+          252,
+          248,
+          99
+        ],
+        "maxHeight": 8.8,
+        "origin": [
+          6720.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_3_9.hlt",
+      "sha256": "e8a92ea64cbcdf7f086afb4c6c46c1498221ce2db00b26c94f23402021a92946",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.0": {
+      "bytes": 40563,
+      "info": {
+        "col": 4,
+        "count": 4189,
+        "countByFirstYear": [
+          1686,
+          323,
+          313,
+          497,
+          388,
+          425,
+          480,
+          77
+        ],
+        "maxHeight": 9.8,
+        "origin": [
+          10560.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_0.hlt",
+      "sha256": "721b1addbeb7ffc8712bf2da05b2403995052da79742bce9897425254d8d5efe",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.1": {
+      "bytes": 39067,
+      "info": {
+        "col": 4,
+        "count": 4004,
+        "countByFirstYear": [
+          1871,
+          276,
+          282,
+          309,
+          335,
+          485,
+          361,
+          85
+        ],
+        "maxHeight": 13.1,
+        "origin": [
+          10560.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_1.hlt",
+      "sha256": "744ed08260ebf81cee5b364aec367d1341fd788594f2eadf826033061c88f3f4",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.2": {
+      "bytes": 144018,
+      "info": {
+        "col": 4,
+        "count": 15272,
+        "countByFirstYear": [
+          7676,
+          1320,
+          939,
+          1020,
+          1163,
+          1426,
+          1281,
+          447
+        ],
+        "maxHeight": 17.1,
+        "origin": [
+          10560.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_2.hlt",
+      "sha256": "957c52ea0a7196ec120b333fecfe6780cd0b1aa80e11c13b819ed0536640eed8",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.3": {
+      "bytes": 246726,
+      "info": {
+        "col": 4,
+        "count": 25572,
+        "countByFirstYear": [
+          20557,
+          1080,
+          649,
+          642,
+          708,
+          691,
+          803,
+          442
+        ],
+        "maxHeight": 36.7,
+        "origin": [
+          10560.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_3.hlt",
+      "sha256": "b6a5652d205ef380160ecfb694f3a863d500700682cf22fb3f9b4008af552b5c",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.4": {
+      "bytes": 276880,
+      "info": {
+        "col": 4,
+        "count": 28377,
+        "countByFirstYear": [
+          23628,
+          1161,
+          646,
+          657,
+          585,
+          604,
+          671,
+          425
+        ],
+        "maxHeight": 56.5,
+        "origin": [
+          10560.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_4.hlt",
+      "sha256": "5f25d84c4fb508795cd6e5c7635d37e478d7a69dd3cfa4329541bc709093c9c1",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.5": {
+      "bytes": 171736,
+      "info": {
+        "col": 4,
+        "count": 17672,
+        "countByFirstYear": [
+          11510,
+          1300,
+          923,
+          904,
+          801,
+          892,
+          826,
+          516
+        ],
+        "maxHeight": 18.8,
+        "origin": [
+          10560.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_5.hlt",
+      "sha256": "68fb2ac02f9d0bbf195b20f443392ae5d6296067c222cc601b3f087ef9999dd8",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.6": {
+      "bytes": 177719,
+      "info": {
+        "col": 4,
+        "count": 19114,
+        "countByFirstYear": [
+          9497,
+          1769,
+          1209,
+          1204,
+          1046,
+          1738,
+          1858,
+          793
+        ],
+        "maxHeight": 10.6,
+        "origin": [
+          10560.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_6.hlt",
+      "sha256": "8e4532c8fc5e8e79bef618bd9749a8593e3a90a6c430254d94f115e202ccc988",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.7": {
+      "bytes": 61719,
+      "info": {
+        "col": 4,
+        "count": 6631,
+        "countByFirstYear": [
+          3179,
+          450,
+          303,
+          466,
+          349,
+          692,
+          861,
+          331
+        ],
+        "maxHeight": 9.8,
+        "origin": [
+          10560.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_7.hlt",
+      "sha256": "738130e595662daaccac1281cf3540eb4094997670d2a911968781c76194d4d8",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.8": {
+      "bytes": 48448,
+      "info": {
+        "col": 4,
+        "count": 5057,
+        "countByFirstYear": [
+          2868,
+          367,
+          289,
+          373,
+          318,
+          378,
+          322,
+          142
+        ],
+        "maxHeight": 10.1,
+        "origin": [
+          10560.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_8.hlt",
+      "sha256": "51061c9b7dd330b8400d8d62389d933b64f1b541a4d1bd4da4ec40a1deac54ad",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.4.9": {
+      "bytes": 48910,
+      "info": {
+        "col": 4,
+        "count": 5126,
+        "countByFirstYear": [
+          2944,
+          340,
+          228,
+          410,
+          338,
+          428,
+          317,
+          121
+        ],
+        "maxHeight": 10.0,
+        "origin": [
+          10560.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_4_9.hlt",
+      "sha256": "db8e7a924880259aabd8c3794f34881ac8dd1a5970b2f6b2e8a293a60bac189a",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.0": {
+      "bytes": 58204,
+      "info": {
+        "col": 5,
+        "count": 6203,
+        "countByFirstYear": [
+          3366,
+          494,
+          428,
+          519,
+          457,
+          462,
+          389,
+          88
+        ],
+        "maxHeight": 7.9,
+        "origin": [
+          14400.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_0.hlt",
+      "sha256": "88a4398b859d300a9e019da07180606f465fbe9ad4524c6cfee4d0c8819f7e2a",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.1": {
+      "bytes": 38547,
+      "info": {
+        "col": 5,
+        "count": 4121,
+        "countByFirstYear": [
+          2126,
+          301,
+          267,
+          342,
+          327,
+          337,
+          353,
+          68
+        ],
+        "maxHeight": 8.9,
+        "origin": [
+          14400.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_1.hlt",
+      "sha256": "3f08054dc69079eac8d0be45d2bf65c58aaccc4101df9467d5b2e3b2fd1416b3",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.2": {
+      "bytes": 66650,
+      "info": {
+        "col": 5,
+        "count": 7057,
+        "countByFirstYear": [
+          3329,
+          647,
+          465,
+          585,
+          505,
+          651,
+          620,
+          255
+        ],
+        "maxHeight": 12.6,
+        "origin": [
+          14400.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_2.hlt",
+      "sha256": "db325578cdb51dbfa4b79feadf96a8bc3c1c62ab785a32003c8993db699af846",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.3": {
+      "bytes": 182409,
+      "info": {
+        "col": 5,
+        "count": 18864,
+        "countByFirstYear": [
+          11705,
+          1387,
+          912,
+          1144,
+          815,
+          1102,
+          1144,
+          655
+        ],
+        "maxHeight": 16.9,
+        "origin": [
+          14400.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_3.hlt",
+      "sha256": "c5f72bdfc5e82730770c12f948f4ebd1f9a6466bd59e812914566ee5fcf3c4dc",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.4": {
+      "bytes": 184207,
+      "info": {
+        "col": 5,
+        "count": 18840,
+        "countByFirstYear": [
+          13619,
+          1204,
+          714,
+          690,
+          678,
+          820,
+          701,
+          414
+        ],
+        "maxHeight": 29.6,
+        "origin": [
+          14400.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_4.hlt",
+      "sha256": "fd98e3c5464352cde51367e3f47b5e69665dedcf03fd1cbad08bd5e0b8acc6ae",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.5": {
+      "bytes": 178749,
+      "info": {
+        "col": 5,
+        "count": 18731,
+        "countByFirstYear": [
+          10216,
+          1743,
+          1438,
+          1258,
+          1039,
+          1214,
+          1264,
+          559
+        ],
+        "maxHeight": 13.8,
+        "origin": [
+          14400.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_5.hlt",
+      "sha256": "44eeb5e8e03aa21a62b2b96c08341214a00b09e58619e22cca8091a46f037a82",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.6": {
+      "bytes": 55972,
+      "info": {
+        "col": 5,
+        "count": 5951,
+        "countByFirstYear": [
+          2929,
+          602,
+          459,
+          392,
+          302,
+          477,
+          494,
+          296
+        ],
+        "maxHeight": 10.0,
+        "origin": [
+          14400.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_6.hlt",
+      "sha256": "e48a70366c06f5a244543974e459ea567c9d6a831b99bafdeb9b38bb6a1fb11e",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.7": {
+      "bytes": 44419,
+      "info": {
+        "col": 5,
+        "count": 4689,
+        "countByFirstYear": [
+          2747,
+          385,
+          273,
+          279,
+          204,
+          311,
+          236,
+          254
+        ],
+        "maxHeight": 9.9,
+        "origin": [
+          14400.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_7.hlt",
+      "sha256": "9ce89d3119a501b4111e13c486938f5506500890dcd8e023517163a3ae99860c",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.8": {
+      "bytes": 31702,
+      "info": {
+        "col": 5,
+        "count": 3317,
+        "countByFirstYear": [
+          2342,
+          223,
+          142,
+          160,
+          94,
+          159,
+          123,
+          74
+        ],
+        "maxHeight": 8.0,
+        "origin": [
+          14400.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_8.hlt",
+      "sha256": "496f0e56a2d7076ca8a7381523613c9c043b64fa0c98a94f837e4c63f80b5c33",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.5.9": {
+      "bytes": 28980,
+      "info": {
+        "col": 5,
+        "count": 2974,
+        "countByFirstYear": [
+          2006,
+          180,
+          126,
+          154,
+          151,
+          191,
+          109,
+          57
+        ],
+        "maxHeight": 8.6,
+        "origin": [
+          14400.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_5_9.hlt",
+      "sha256": "b4aa8b4f331b0ad84dca015330645490e9a08202432684a1a865042b0a2ce87d",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.0": {
+      "bytes": 53670,
+      "info": {
+        "col": 6,
+        "count": 5700,
+        "countByFirstYear": [
+          3433,
+          537,
+          297,
+          399,
+          310,
+          388,
+          292,
+          44
+        ],
+        "maxHeight": 7.5,
+        "origin": [
+          18240.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_0.hlt",
+      "sha256": "4c2b92a87899e3440af57eaf7e1f9a06bc8a7d02af4bc84c5e49c26102ad0246",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.1": {
+      "bytes": 18095,
+      "info": {
+        "col": 6,
+        "count": 1827,
+        "countByFirstYear": [
+          902,
+          180,
+          125,
+          125,
+          146,
+          166,
+          147,
+          36
+        ],
+        "maxHeight": 6.8,
+        "origin": [
+          18240.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_1.hlt",
+      "sha256": "6cb222842427fd83bc4a01df9358ede38e5d35c1de6f42a752574e8d0e65569f",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.2": {
+      "bytes": 83035,
+      "info": {
+        "col": 6,
+        "count": 8749,
+        "countByFirstYear": [
+          4472,
+          777,
+          352,
+          605,
+          498,
+          845,
+          962,
+          238
+        ],
+        "maxHeight": 10.7,
+        "origin": [
+          18240.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_2.hlt",
+      "sha256": "df7ff4831b7ea7f3467909872a95467f57c7a4098c551210a0f239f0ff7364fc",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.3": {
+      "bytes": 141511,
+      "info": {
+        "col": 6,
+        "count": 14378,
+        "countByFirstYear": [
+          8870,
+          1086,
+          674,
+          708,
+          647,
+          1015,
+          947,
+          431
+        ],
+        "maxHeight": 15.6,
+        "origin": [
+          18240.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_3.hlt",
+      "sha256": "a353a54fd704ba9e1723bc4ad3a57701830d9909af0406fc4f9bd2cd2ccad011",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.4": {
+      "bytes": 145662,
+      "info": {
+        "col": 6,
+        "count": 15233,
+        "countByFirstYear": [
+          7887,
+          1491,
+          858,
+          982,
+          904,
+          1349,
+          1257,
+          505
+        ],
+        "maxHeight": 13.7,
+        "origin": [
+          18240.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_4.hlt",
+      "sha256": "2b7d0b19f624ad033d3a27347fa382f0e5ddeb16de2a8bcbeea158c6df98752e",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.5": {
+      "bytes": 72680,
+      "info": {
+        "col": 6,
+        "count": 7782,
+        "countByFirstYear": [
+          3130,
+          691,
+          635,
+          664,
+          546,
+          933,
+          892,
+          291
+        ],
+        "maxHeight": 10.9,
+        "origin": [
+          18240.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_5.hlt",
+      "sha256": "033fa8913612c57ecac08f1f89aa82424f4898fa885f9f092a7e202314a330bc",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.6": {
+      "bytes": 31531,
+      "info": {
+        "col": 6,
+        "count": 3317,
+        "countByFirstYear": [
+          1901,
+          237,
+          163,
+          180,
+          198,
+          309,
+          236,
+          93
+        ],
+        "maxHeight": 9.0,
+        "origin": [
+          18240.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_6.hlt",
+      "sha256": "7e2835cceb9ca349e3c16c9e9365e65ee8b9dfca6c6739a743410913325023dd",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.7": {
+      "bytes": 32530,
+      "info": {
+        "col": 6,
+        "count": 3435,
+        "countByFirstYear": [
+          2409,
+          212,
+          156,
+          154,
+          132,
+          160,
+          121,
+          91
+        ],
+        "maxHeight": 9.5,
+        "origin": [
+          18240.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_7.hlt",
+      "sha256": "83d9358d47f00b39cf4ff4fa8f28497eaaee7c5a7f5f9cd454b14e1a87d469a2",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.8": {
+      "bytes": 28524,
+      "info": {
+        "col": 6,
+        "count": 2930,
+        "countByFirstYear": [
+          2002,
+          171,
+          140,
+          132,
+          116,
+          149,
+          134,
+          86
+        ],
+        "maxHeight": 10.4,
+        "origin": [
+          18240.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_8.hlt",
+      "sha256": "8d6dcb7ee3c3443c7242a7f3f67519d8b7258d368e7af726fa368df440a31660",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.6.9": {
+      "bytes": 27580,
+      "info": {
+        "col": 6,
+        "count": 2886,
+        "countByFirstYear": [
+          1975,
+          163,
+          98,
+          186,
+          132,
+          149,
+          135,
+          48
+        ],
+        "maxHeight": 8.7,
+        "origin": [
+          18240.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_6_9.hlt",
+      "sha256": "3c95cbbe30d86c99ff8c2af95b1d095bfe5b610cb55758c41b0d7b12a61e4db5",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.0": {
+      "bytes": 18983,
+      "info": {
+        "col": 7,
+        "count": 1901,
+        "countByFirstYear": [
+          1112,
+          143,
+          99,
+          150,
+          117,
+          148,
+          111,
+          21
+        ],
+        "maxHeight": 7.2,
+        "origin": [
+          22080.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_0.hlt",
+      "sha256": "e52e39d698b841dcbc7b9ee13cf6e47ca5e8bf67d31f10e9546240abf584a840",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.1": {
+      "bytes": 43654,
+      "info": {
+        "col": 7,
+        "count": 4638,
+        "countByFirstYear": [
+          2464,
+          458,
+          179,
+          220,
+          346,
+          444,
+          404,
+          123
+        ],
+        "maxHeight": 9.5,
+        "origin": [
+          22080.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_1.hlt",
+      "sha256": "c782af8af33f95e75d3888294a997f325729062d9fa564cac8b6a62c1d229048",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.2": {
+      "bytes": 75346,
+      "info": {
+        "col": 7,
+        "count": 8064,
+        "countByFirstYear": [
+          4046,
+          707,
+          286,
+          400,
+          463,
+          879,
+          1011,
+          272
+        ],
+        "maxHeight": 12.2,
+        "origin": [
+          22080.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_2.hlt",
+      "sha256": "06d99956ab5cc628e950a4b6cf9bcc16da82ada981875c8e3acb47e1e39d1683",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.3": {
+      "bytes": 173067,
+      "info": {
+        "col": 7,
+        "count": 17951,
+        "countByFirstYear": [
+          10248,
+          1460,
+          939,
+          1141,
+          1035,
+          1340,
+          1279,
+          509
+        ],
+        "maxHeight": 29.9,
+        "origin": [
+          22080.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_3.hlt",
+      "sha256": "5fc6bf62539223e7351a2de116ef173a09f1256e6a4462fafd1c404342e64ce6",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.4": {
+      "bytes": 101959,
+      "info": {
+        "col": 7,
+        "count": 11051,
+        "countByFirstYear": [
+          5359,
+          886,
+          705,
+          892,
+          704,
+          967,
+          1016,
+          522
+        ],
+        "maxHeight": 21.5,
+        "origin": [
+          22080.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_4.hlt",
+      "sha256": "e350983c7c6e53ce68b4e3b9670833fd7bf6ee23aa6de26137367697aa5ac67b",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.5": {
+      "bytes": 45102,
+      "info": {
+        "col": 7,
+        "count": 4812,
+        "countByFirstYear": [
+          2428,
+          379,
+          248,
+          442,
+          304,
+          405,
+          470,
+          136
+        ],
+        "maxHeight": 9.6,
+        "origin": [
+          22080.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_5.hlt",
+      "sha256": "a6b9f5587ffd808c552f0719806f31505850cc9cd039b514be201ad136f27b1f",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.6": {
+      "bytes": 38757,
+      "info": {
+        "col": 7,
+        "count": 4071,
+        "countByFirstYear": [
+          2610,
+          297,
+          231,
+          217,
+          141,
+          217,
+          208,
+          150
+        ],
+        "maxHeight": 9.1,
+        "origin": [
+          22080.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_6.hlt",
+      "sha256": "2635d07ee6a7ceeec6b47c42570c04121813848be721de7121e85e66f1ad72bc",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.7": {
+      "bytes": 26900,
+      "info": {
+        "col": 7,
+        "count": 2809,
+        "countByFirstYear": [
+          1939,
+          157,
+          115,
+          108,
+          112,
+          159,
+          102,
+          117
+        ],
+        "maxHeight": 8.9,
+        "origin": [
+          22080.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_7.hlt",
+      "sha256": "eca01c6b1c3772e2a527f2aa056528007aeac9941bf41b0f4a6b4211de973e4b",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.8": {
+      "bytes": 32003,
+      "info": {
+        "col": 7,
+        "count": 3383,
+        "countByFirstYear": [
+          2321,
+          205,
+          123,
+          154,
+          150,
+          198,
+          147,
+          85
+        ],
+        "maxHeight": 8.2,
+        "origin": [
+          22080.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_8.hlt",
+      "sha256": "958cd9dd4f2082b83fb6efd7d4d3e9eb7b1f5282d46476e2927128126881deba",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.7.9": {
+      "bytes": 30763,
+      "info": {
+        "col": 7,
+        "count": 3228,
+        "countByFirstYear": [
+          2236,
+          162,
+          130,
+          169,
+          147,
+          194,
+          138,
+          52
+        ],
+        "maxHeight": 8.2,
+        "origin": [
+          22080.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_7_9.hlt",
+      "sha256": "db26cc3cc0eb1e702c56462105bdfbefc3eafc15bc5383f801eab20b73e1e3ef",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.0": {
+      "bytes": 15394,
+      "info": {
+        "col": 8,
+        "count": 1527,
+        "countByFirstYear": [
+          921,
+          91,
+          72,
+          113,
+          109,
+          97,
+          101,
+          23
+        ],
+        "maxHeight": 6.6,
+        "origin": [
+          25920.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_0.hlt",
+      "sha256": "2c2ddf8aec6fc9b6888366d07f9fc54c3e05ff3d5f6f76bbc0711359161677f6",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.1": {
+      "bytes": 47545,
+      "info": {
+        "col": 8,
+        "count": 5101,
+        "countByFirstYear": [
+          2764,
+          364,
+          238,
+          341,
+          367,
+          478,
+          467,
+          82
+        ],
+        "maxHeight": 9.2,
+        "origin": [
+          25920.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_1.hlt",
+      "sha256": "9c1a0ce135a9568cb0f61a5d3ba438dcfd0b8224d2260cfdffdbab1fc726506e",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.2": {
+      "bytes": 97891,
+      "info": {
+        "col": 8,
+        "count": 10443,
+        "countByFirstYear": [
+          4434,
+          1077,
+          653,
+          715,
+          741,
+          1284,
+          1244,
+          295
+        ],
+        "maxHeight": 9.7,
+        "origin": [
+          25920.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_2.hlt",
+      "sha256": "1ee1c34bcdcfdb743f20f4cfee35725f2537101a9ec009e55abf674aff054820",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.3": {
+      "bytes": 127373,
+      "info": {
+        "col": 8,
+        "count": 13463,
+        "countByFirstYear": [
+          5509,
+          1289,
+          995,
+          1267,
+          1170,
+          1524,
+          1402,
+          307
+        ],
+        "maxHeight": 9.2,
+        "origin": [
+          25920.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_3.hlt",
+      "sha256": "b00b1cf8cd5f87dd63fc8734cf8c6c509f269ddf701d6c6b702a009c58ede784",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.4": {
+      "bytes": 61855,
+      "info": {
+        "col": 8,
+        "count": 6383,
+        "countByFirstYear": [
+          3247,
+          527,
+          440,
+          515,
+          415,
+          550,
+          570,
+          119
+        ],
+        "maxHeight": 11.1,
+        "origin": [
+          25920.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_4.hlt",
+      "sha256": "328e07aadef5136b02a6eac5372059b971c069b25214ad246ffc6f2e1d34ea7d",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.5": {
+      "bytes": 44171,
+      "info": {
+        "col": 8,
+        "count": 4735,
+        "countByFirstYear": [
+          2593,
+          425,
+          288,
+          344,
+          257,
+          398,
+          351,
+          79
+        ],
+        "maxHeight": 9.3,
+        "origin": [
+          25920.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_5.hlt",
+      "sha256": "3247e46cdddc150e4edb28ea956fe90be8ee0b1f5bf2ecac8c7b50621913d94a",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.6": {
+      "bytes": 32819,
+      "info": {
+        "col": 8,
+        "count": 3506,
+        "countByFirstYear": [
+          2176,
+          265,
+          174,
+          149,
+          165,
+          232,
+          221,
+          124
+        ],
+        "maxHeight": 7.1,
+        "origin": [
+          25920.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_6.hlt",
+      "sha256": "4a43210cf158d39ab11b2fbae1dd86692b4953c0cd5bbcc8f73e42245cea0ac7",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.7": {
+      "bytes": 24467,
+      "info": {
+        "col": 8,
+        "count": 2558,
+        "countByFirstYear": [
+          1749,
+          150,
+          95,
+          117,
+          119,
+          116,
+          125,
+          87
+        ],
+        "maxHeight": 8.5,
+        "origin": [
+          25920.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_7.hlt",
+      "sha256": "003ae25394e9ce170e7577502fe3d069e9488e6fff80d45bd63ba7602a995f9e",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.8": {
+      "bytes": 25492,
+      "info": {
+        "col": 8,
+        "count": 2674,
+        "countByFirstYear": [
+          1837,
+          145,
+          114,
+          124,
+          116,
+          135,
+          112,
+          91
+        ],
+        "maxHeight": 7.0,
+        "origin": [
+          25920.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_8.hlt",
+      "sha256": "dd5a03d259c34f69b0eb15707b9a3d94e0f89032e8f30fe7093ea7b1f55a2411",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.8.9": {
+      "bytes": 23617,
+      "info": {
+        "col": 8,
+        "count": 2481,
+        "countByFirstYear": [
+          1647,
+          144,
+          99,
+          135,
+          135,
+          142,
+          125,
+          54
+        ],
+        "maxHeight": 6.8,
+        "origin": [
+          25920.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_8_9.hlt",
+      "sha256": "50d87ccc9dd4b3dd10e23460859accc3794de5632112ed09924d3f6ab5aff9de",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.0": {
+      "bytes": 45558,
+      "info": {
+        "col": 9,
+        "count": 4825,
+        "countByFirstYear": [
+          3111,
+          307,
+          169,
+          305,
+          293,
+          311,
+          292,
+          37
+        ],
+        "maxHeight": 10.2,
+        "origin": [
+          29760.0,
+          -11520.0
+        ],
+        "row": 0
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_0.hlt",
+      "sha256": "abb99b126c8005c1efa2f01c37a0dbb22aeb59a820082cb12aba4dd800d7235c",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.1": {
+      "bytes": 26694,
+      "info": {
+        "col": 9,
+        "count": 2738,
+        "countByFirstYear": [
+          1629,
+          174,
+          135,
+          215,
+          147,
+          200,
+          199,
+          39
+        ],
+        "maxHeight": 9.3,
+        "origin": [
+          29760.0,
+          -7680.0
+        ],
+        "row": 1
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_1.hlt",
+      "sha256": "3ed2bf14850621e496fc781c48b09967bfcf4bce78f5c8237857284c91c104e3",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.2": {
+      "bytes": 43111,
+      "info": {
+        "col": 9,
+        "count": 4498,
+        "countByFirstYear": [
+          2321,
+          315,
+          207,
+          341,
+          343,
+          449,
+          430,
+          92
+        ],
+        "maxHeight": 9.5,
+        "origin": [
+          29760.0,
+          -3840.0
+        ],
+        "row": 2
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_2.hlt",
+      "sha256": "444a3c2aa7ba7a642ba53780b9aa7110e1235ac476e027d1a0b01622c0534824",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.3": {
+      "bytes": 48404,
+      "info": {
+        "col": 9,
+        "count": 5093,
+        "countByFirstYear": [
+          2628,
+          435,
+          306,
+          397,
+          348,
+          465,
+          395,
+          119
+        ],
+        "maxHeight": 7.7,
+        "origin": [
+          29760.0,
+          0.0
+        ],
+        "row": 3
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_3.hlt",
+      "sha256": "85f0dcda7f25488f402e5ec376a4267651855e3786810a2a94d71f9cfda92564",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.4": {
+      "bytes": 38147,
+      "info": {
+        "col": 9,
+        "count": 3910,
+        "countByFirstYear": [
+          2057,
+          349,
+          215,
+          272,
+          267,
+          346,
+          335,
+          69
+        ],
+        "maxHeight": 11.3,
+        "origin": [
+          29760.0,
+          3840.0
+        ],
+        "row": 4
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_4.hlt",
+      "sha256": "c5eb52bf7e01f10fb9800cbc6ce93f4f6b3518780c5cace2bd229cfba3d61be2",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.5": {
+      "bytes": 57508,
+      "info": {
+        "col": 9,
+        "count": 6126,
+        "countByFirstYear": [
+          3401,
+          487,
+          330,
+          402,
+          403,
+          568,
+          462,
+          73
+        ],
+        "maxHeight": 9.0,
+        "origin": [
+          29760.0,
+          7680.0
+        ],
+        "row": 5
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_5.hlt",
+      "sha256": "7b914b4a5f29dd17bbd8a0e38fe8f16b4fd95235498d110d368f72a3158b21da",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.6": {
+      "bytes": 72841,
+      "info": {
+        "col": 9,
+        "count": 7766,
+        "countByFirstYear": [
+          4132,
+          621,
+          384,
+          409,
+          442,
+          852,
+          773,
+          153
+        ],
+        "maxHeight": 9.9,
+        "origin": [
+          29760.0,
+          11520.0
+        ],
+        "row": 6
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_6.hlt",
+      "sha256": "0f7d2848975152a7c0572e404c8f7d93e487cac3cb77fd39461efb8575c2fb92",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.7": {
+      "bytes": 29268,
+      "info": {
+        "col": 9,
+        "count": 3111,
+        "countByFirstYear": [
+          2076,
+          168,
+          145,
+          181,
+          154,
+          174,
+          157,
+          56
+        ],
+        "maxHeight": 8.2,
+        "origin": [
+          29760.0,
+          15360.0
+        ],
+        "row": 7
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_7.hlt",
+      "sha256": "ac88b4d3a2cf099e3b56721fdf20898dc6200e13264e254b13b34513ee4b38da",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.8": {
+      "bytes": 24551,
+      "info": {
+        "col": 9,
+        "count": 2550,
+        "countByFirstYear": [
+          1841,
+          123,
+          80,
+          142,
+          128,
+          111,
+          96,
+          29
+        ],
+        "maxHeight": 9.3,
+        "origin": [
+          29760.0,
+          19200.0
+        ],
+        "row": 8
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_8.hlt",
+      "sha256": "12808b264446c12eae036060d887b6a2e3cb01d3b1423516a3ee715d7ed14045",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
+    "buildings.tile.9.9": {
+      "bytes": 27163,
+      "info": {
+        "col": 9,
+        "count": 2835,
+        "countByFirstYear": [
+          1968,
+          147,
+          126,
+          169,
+          128,
+          152,
+          115,
+          30
+        ],
+        "maxHeight": 11.3,
+        "origin": [
+          29760.0,
+          23040.0
+        ],
+        "row": 9
+      },
+      "kind": "buildings",
+      "path": "buildings/tile_9_9.hlt",
+      "sha256": "391dd37d349d609a3cddc74c82a5ec745af5edbd84a6d25dad8b003da2342ec5",
+      "sources": [
+        "open-buildings",
+        "open-buildings-temporal"
+      ],
+      "version": 1
+    },
     "labels.places": {
       "bytes": 8949,
       "info": {
@@ -347,6 +3463,22 @@
       "publisher": "European Space Agency",
       "url": "https://esa-worldcover.org/en/data-access"
     },
+    "open-buildings": {
+      "attribution": "W. Sirko, S. Kashubin, M. Ritter, A. Annkah, Y.S.E. Bouchareb, Y. Dauphin, D. Keysers, M. Neumann, M. Cisse, J.A. Quinn. Continental-scale building detection from high resolution satellite imagery. arXiv:2107.12283, 2021. Open Buildings v3, Google Research, CC BY 4.0.",
+      "license": "CC BY 4.0 (also offered under ODbL 1.0; used here under CC BY 4.0)",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Open Buildings v3 (building footprints)",
+      "publisher": "Google Research",
+      "url": "https://sites.research.google/gr/open-buildings/"
+    },
+    "open-buildings-temporal": {
+      "attribution": "W. Sirko, E.A. Brempong, J.T.C. Marcos, A. Annkah, A. Korme, M.A. Hassen, K. Sapkota, T. Shekel, A. Diack, S. Nevo, J. Hickey, J. Quinn. High-Resolution Building and Road Detection from Sentinel-2. arXiv:2310.11622, 2023. Open Buildings 2.5D Temporal, Google Research, CC BY 4.0. Contains modified Copernicus Sentinel data (2016-2023).",
+      "license": "CC BY 4.0 (also offered under ODbL 1.0; used here under CC BY 4.0)",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Open Buildings 2.5D Temporal (annual presence and height, 2016 to 2023)",
+      "publisher": "Google Research",
+      "url": "https://sites.research.google/gr/open-buildings/temporal/"
+    },
     "openstreetmap": {
       "attribution": "(c) OpenStreetMap contributors, available under the Open Database License.",
       "license": "ODbL 1.0 (share-alike for derived databases)",
@@ -356,6 +3488,6 @@
       "url": "https://www.openstreetmap.org/copyright"
     }
   },
-  "totalBytes": 4142569,
+  "totalBytes": 12060332,
   "version": 1
 }
