@@ -1,6 +1,6 @@
 # Hilltide: status
 
-Last updated: 2026-11-16, end of Phase 1, start of Phase 2.
+Last updated: 2026-11-16, end of Phase 2.
 
 A new session can resume from `CLAUDE.md`, `docs/PROJECT_BRIEF.md` and this
 file. Decisions are in `docs/DECISIONS.md`, licenses in `docs/LICENSES.md`.
@@ -11,8 +11,8 @@ file. Decisions are in `docs/DECISIONS.md`, licenses in `docs/LICENSES.md`.
 |---|---|
 | 0 Foundations | Done |
 | 1 Data pipeline | Done |
-| 2 The Land | In progress (plan below) |
-| 3 Kigali Builds Itself | Not started. Plan to be approved by the owner first. |
+| 2 The Land | Done |
+| 3 Kigali Builds Itself | Next. Plan proposed below; waiting for the owner's approval. |
 | 4 Make It Rain | Not started |
 | 5 Validation | Not started |
 | 6 Story and design | Not started |
@@ -59,15 +59,14 @@ Things only the owner can do. None of them block the current phase.
 | Browser | Chromium for Playwright 1.63.0, pre-installed |
 | Network | Unrestricted, through a proxy |
 
-Browser graphics in the sandbox:
+Browser graphics in the sandbox (and on GitHub's CI runners):
 - WebGL2 works by default, with float render targets.
-- WebGPU returns no adapter by default. With the launch flags
-  `--enable-unsafe-webgpu --use-webgpu-adapter=swiftshader
-  --enable-unsafe-swiftshader --use-angle=swiftshader --ignore-gpu-blocklist`
-  an adapter and device are created.
-- A three.js 0.187 smoke test rendered correctly and ran a compute pass on
-  its WebGL2 backend. On its WebGPU backend the device was lost ("Instance
-  dropped"). Not yet investigated; first task of Phase 2.
+- WebGPU needs launch flags. The working set is in
+  `web/playwright.config.ts` (`SOFTWARE_GRAPHICS`): Vulkan on SwiftShader.
+  With `--use-webgpu-adapter=swiftshader` instead, the device is lost on
+  the first frame.
+- Everything is rendered on the CPU. Frame times measured here say nothing
+  about a real GPU.
 
 Reachable: Copernicus DEM on S3, Google Open Buildings buckets, ESA
 WorldCover on S3, openstreetmap.fr extracts, npm, PyPI.
@@ -178,49 +177,124 @@ against known developments.
   38.4 km (decision 15).
 - Natural Earth is not used; the OSM border is better.
 
-## Phase 2 plan: The Land (approved 2026-11-16)
+## Phase 2 report (The Land)
 
-Goal: the page opens on Rwanda from high altitude in live 3D within a few
-seconds; scrolling flies the camera across the hills to Kigali, lit by the
-real sun position for the current time in Kigali.
+### What works
+- The page opens on Rwanda from 365 km, drawn live, and scrolling flies the
+  camera over Lake Kivu and the central hills down to Kigali.
+- Three nested terrain levels (250 m, 90 m, 30 m) on WebGPU and on WebGL2,
+  from the same shader code. The country level draws first; the other two
+  load after the first frame, are prepared in a Web Worker, and have their
+  shaders compiled before they appear.
+- Light from the real sun position for the current time in Kigali
+  (`web/src/sky/sun.ts`, tested against solstice, equinox and Kigali
+  daylight), terrain self-shadows, sky, haze, water with reflection and sun
+  glint, and a gentle Earth curvature.
+- Night: a stylised moonlit view that says what it is, with a control for
+  golden hour of the same day.
+- Rwanda set apart from its neighbours from high altitude (border line,
+  dimmed surroundings); mapped rivers drawn as water; 14 place labels.
+- Loading state (title and drawn ridges) that fades to the live scene; a
+  clear message for browsers with neither WebGPU nor WebGL2.
+- Reduced motion: the camera cuts between five fixed views instead of flying.
+- Wide screens frame the country beside the title; tall screens tilt the
+  camera down so phones do not show half a screen of sky.
+- Quality: three tiers, an initial guess from device hints, and an automatic
+  scaler driven by measured frame times (resolution first, then tier).
+  `?quality=low|medium|high` fixes a tier.
+- `?perf=1`: an overlay with backend, GPU string, resolution, tier, frame
+  time median and percentiles, hitch count, first-frame time and bytes, and
+  a "Copy report" button. This is how to measure on real devices.
+- Other address-bar options: `?backend=webgl2`, `?time=<ISO time>`,
+  `?still` (cuts instead of flight).
 
-Architecture, under `web/src/`:
-- `core/renderer.ts`: three.js `WebGPURenderer`; WebGPU when available, else
-  its WebGL2 backend (`?backend=webgl2` forces it). Clear static message if
-  neither works.
-- `core/quality.ts`: three tiers and an automatic scaler from measured frame
-  times (pixel ratio, mesh density, shadow steps).
-- `perf/`: frame-time recorder and a `?perf=1` overlay (device, backend, GPU
-  string, resolution, tier, median and percentile frame times, hitches).
-- `terrain/`: three nested levels. Heights as float textures read with texel
-  fetches; grid chunks displaced in the vertex shader, coarser with
-  distance; per-pixel normals from the height texture; coarse level cut away
-  inside the finer one, finer level blended to coarse at its edge. Colour
-  from land cover and elevation in the place palette; lakes from the water
-  class. Sun from `sky/sun.ts`, self-shadow by marching the height texture,
-  sky gradient with sun disc, haze, gentle Earth curvature. Moonlit look at
-  night with a "Now in Kigali HH:MM" control and a golden-hour option.
-- `terrain/overlays`: rivers and border as draped ribbons; a few HTML labels.
-- `story/`: scroll to chapter progress, keyframed camera path with damping;
-  cuts instead of flight under reduced motion.
-- Loading: the title page is the loading state and cross-fades to the scene
-  after the first frame. Region and Kigali levels load as the scroll
-  approaches, decoded in a Web Worker.
+### Measured
+| Measure | Value |
+|---|---|
+| Web unit tests | 117 passing, 13 files |
+| Pipeline tests | 73 passing |
+| Browser tests | 22 passing: desktop and phone viewports, WebGL2 and WebGPU |
+| Data before the first frame | 1.59 MB in 9 requests, uncompressed transfer (budget 5 MB) |
+| Time to first frame, headless | 0.6 to 0.8 s on a local server |
+| JavaScript bundle | 0.85 MB (0.23 MB gzipped) |
+| Total site data | 12.09 MB in 114 assets |
+| CI with the browser suite | about 3 minutes on GitHub's runners |
 
-Order of work, each step committed and pushed:
-1. Renderer, backend selection, perf overlay, browser tests with software-GL
-   flags; resolve or document the WebGPU device loss.
-2. Country level lit by the real sun, sky and haze; loading state;
-   first-frame budget test (fails above 5 MB).
-3. Three nested levels with worker-based progressive loading.
-4. Scroll-driven dive with chapter text skeleton and reduced motion.
-5. Rivers, border, lakes, labels, night handling.
-6. Automatic quality scaling; measurements; Phase 2 report here.
+Screenshots at five scroll positions are saved by `make e2e` to
+`web/test-results/screens/` and uploaded by CI as the "screenshots" artifact.
+Each is checked to be a real picture (150 to 195 distinct quantised colours
+and luminance contrast of 28 to 43, against about 30 colours for a blank
+frame).
 
-Done when: browser tests on desktop and phone viewports save real (non
-blank) screenshots at five scroll positions with no console errors; unit
-tests cover camera path, scroll mapping, quality scaler, frame statistics
-and label projection; headless frame times are recorded here, labelled as
-software rendering; CI is green.
+Frame times, headless software rendering (CPU rasteriser, 1120 x 700, medium
+quality, continuous rendering). These are not real-device numbers:
 
-Then stop and present the Phase 3 plan for approval.
+| Backend | View | Median frame | 95th percentile |
+|---|---|---|---|
+| WebGL2 | From orbit | 17 ms | 933 ms |
+| WebGL2 | Over Kigali | 17 ms | 1,517 ms |
+| WebGPU | From orbit | 1,083 ms | 2,400 ms |
+| WebGPU | Over Kigali | 1,100 ms | 2,400 ms |
+
+The WebGL2 median is the browser's frame tick, not the cost of a frame: the
+software rasteriser finishes frames late and in bursts, which the 95th
+percentile shows. Real-device measurements: none yet (Needs owner 6).
+
+### Not verified, stated plainly
+- 60 fps on a laptop and 30 fps on a mid-range phone: cannot be measured
+  here. The design choices aimed at them are in decisions 24, 25 and 31.
+- No hitch over 100 ms while scrolling on desktop: levels are prepared in a
+  worker and shaders are compiled before a level appears, but the upload of
+  the 1280 x 1280 Kigali texture has not been timed on a real GPU.
+- Safari and Firefox: only Chromium is available here.
+
+### Limits to state on the site (Phase 6)
+- Lighting relief is strengthened, especially from orbit; the land's shape
+  is true scale (decision 27).
+- The night view uses a stylised moon.
+- Ground colours are land-cover classes mapped to a palette, not a
+  satellite photograph.
+
+### What failed or changed along the way
+- `--use-webgpu-adapter=swiftshader` loses the WebGPU device; replaced by
+  Vulkan SwiftShader flags (decision 32).
+- Rivers and the border were planned as ribbon meshes; they became water
+  cells and a distance mask (decisions 29 and 30).
+- A hand-placed "Lake Muhazi" label was on dry land; the pipeline's check
+  against land cover caught it.
+- The first palette and haze washed out low views; slope shading and
+  thinner haze near the ground fixed it.
+
+## Phase 3 plan proposal: Kigali Builds Itself (not yet approved)
+
+Goal: a year slider from 2016 to 2023 that makes the city rise out of the
+hills, building by building, with live counts, on a mid-range phone.
+
+1. Building renderer (`web/src/buildings/`): one instanced draw call per
+   3.84 km tile. Each instance is a box from the tile data (centre, long and
+   short side, angle, first year, eight heights). The vertex shader places
+   it on the Kigali terrain texture and sets its height from the slider's
+   year, interpolating between the two nearest years; a building grows from
+   the ground during the year before its first year.
+2. Level of detail: tiles outside the view are skipped; each tile draws only
+   its first N buildings (they are stored largest first), with N set by
+   distance and quality tier. Rough budgets to refine by measurement: about
+   150,000 boxes on the low tier, 350,000 on medium, all 825,495 on high.
+3. Look: walls and roofs lit by the same sun; buildings that appeared in
+   the last year carry a warm tint that fades, so growth is visible as a
+   moving front.
+4. Slider and statistics (`web/src/ui/`): a keyboard-operable range input,
+   play and pause, and counters read from `buildings/stats.json`: buildings
+   standing, added since 2016, footprint area. Next to them, the range from
+   the threshold sensitivity table and the rasters' own count, so the
+   uncertainty is on the page.
+5. Story: a second pinned act after Act 1. Scrolling through it moves the
+   year; the slider can also be dragged directly. Camera slowly circles
+   the city.
+6. Tests: year interpolation and growth curve, per-tile draw budget, tile
+   visibility, statistics text against `stats.json`; browser screenshots at
+   2016, 2019.5 and 2023 on both backends and both viewports, checking that
+   more of the frame is built in later years; reduced motion.
+7. Done when: the full city renders at every tier, counts on screen equal
+   the data, tests pass in CI, and headless numbers are recorded with the
+   real-device slot left for the owner.

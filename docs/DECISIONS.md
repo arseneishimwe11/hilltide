@@ -187,3 +187,78 @@ considered, and why. Newest at the bottom.
 - Reason: the owner enters plan mode for each phase. Phase 1 was built
   under an earlier plan that said to continue without pausing.
 
+## 24. Terrain is one float texture per level, read with exact texel fetches
+- Decision: each level is an RGBA float texture (height, east slope, north
+  slope, land-cover class). Shaders fetch four texels and blend them by hand.
+- Alternatives: filtered float textures; 16-bit heights in two 8-bit
+  channels; normal maps; heights baked into mesh vertices.
+- Reason: texel fetches need no optional device features, so the same
+  shader runs on WebGL2 and WebGPU, phones included. Height and slope in one
+  texel give a smooth surface and smooth lighting from a single read.
+
+## 25. One simple mesh per level; detail comes from per-pixel shading
+- Decision: each level is drawn with one flat grid (192, 320 or 512 quads a
+  side by quality tier) lifted in the vertex shader. Slope, colour, shadow
+  and haze are computed per pixel from the texture.
+- Alternatives: chunked level of detail; clipmaps.
+- Reason: at these distances the eye reads relief from light, not from the
+  silhouette. A coarse mesh with per-pixel normals looks detailed and costs
+  little, which is what makes the phone budget reachable. Far simpler too.
+
+## 26. Levels overlap and the coarse one steps aside
+- Decision: a finer level follows its parent's surface in a band along its
+  edge; the parent discards pixels further inside than half that band.
+- Alternatives: stitched meshes; skirts.
+- Reason: no cracks and no flicker, with no geometry bookkeeping. In the
+  overlap both levels show the same surface.
+
+## 27. Lighting relief is strengthened; the shape of the land never is
+- Decision: terrain geometry is always true scale. The slope used for
+  lighting is multiplied by 3.6 from orbit, falling to 1.3 near the ground,
+  and steep ground is darkened a little whichever way it faces.
+- Alternatives: true lighting everywhere; vertical exaggeration.
+- Reason: from 365 km true relief is invisible, and at midday true lighting
+  flattens hills. This is the convention of shaded relief maps. The site's
+  limits section must say so (Phase 6).
+
+## 28. Night uses a stylised moon, and says so
+- Decision: when the sun is more than 4 degrees below the horizon the scene
+  is lit by a moon placed opposite the sun's bearing, and the page shows
+  "Night view, with stylised moonlight". A control offers golden hour.
+- Alternatives: real moon position and phase; refuse to show night.
+- Reason: half of all visits fall in Kigali's night. The land must stay
+  legible, and the page must not pretend the light is real when it is not.
+
+## 29. Rivers are marked as water in the terrain's class grid
+- Decision: mapped rivers (and canals in Kigali) are burned into each
+  level's land-cover grid as water cells when the level is prepared.
+- Alternatives: separate ribbon meshes draped over the terrain.
+- Reason: they follow the land exactly at every level, share the water
+  shading, and need no extra geometry or height lookups. Streams and drains
+  are left out: at 30 m cells they would be drawn far wider than they are.
+
+## 30. Rwanda is set apart with a distance-to-border mask
+- Decision: a 1 km grid of signed distance to the border drives a pale
+  border line, dimmed neighbours and a fade to darkness, all only from high
+  altitude.
+- Alternatives: a border ribbon mesh; a hard rectangular edge.
+- Reason: the terrain grid is a rectangle that includes parts of four
+  neighbours. The mask shows the country as a shape for 24 kB.
+
+## 31. Frames are drawn only when something changed
+- Decision: the scene renders when the camera moves, data arrives, the
+  light changes or the window resizes. `?perf=1` renders continuously.
+- Alternatives: render every frame.
+- Reason: Act 1 is still most of the time. Idle rendering drains phone
+  batteries for nothing. Later acts with moving water will render
+  continuously while they play.
+
+## 32. Headless browsers use Vulkan SwiftShader for WebGPU
+- Decision: tests launch Chromium with `--enable-features=Vulkan
+  --use-vulkan=swiftshader --use-angle=swiftshader --enable-unsafe-webgpu
+  --enable-unsafe-swiftshader --ignore-gpu-blocklist`.
+- Alternatives: `--use-webgpu-adapter=swiftshader`.
+- Reason: with the alternative flag the WebGPU device is lost on the first
+  frame. With these, rendering and compute both work, here and on GitHub's
+  runners, so both backends are tested on every push.
+

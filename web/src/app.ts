@@ -1,4 +1,4 @@
-import { Matrix4 } from "three/webgpu";
+import { Matrix4, Scene } from "three/webgpu";
 import { t } from "./core/i18n";
 import { initialTier, QualityScaler, type QualityState, TIERS, type Tier } from "./core/quality";
 import { createRenderer, graphicsSupport, type RenderContext } from "./core/renderer";
@@ -146,7 +146,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
         });
     state.quality = { tier, resolutionScale: 1 };
     land = new LandScene(TIERS[tier], mask);
-    land.addLevel("country", country);
+    await land.addLevel("country", country);
     // Labels are a nicety: the scene starts without waiting for them.
     void assets
       .json<PlaceLabel[]>("labels.curated")
@@ -244,7 +244,13 @@ export async function startApp(root: HTMLElement): Promise<void> {
     loading = true;
     try {
       for (const name of ["region", "kigali"] as const) {
-        land.addLevel(name, await loader.load(name));
+        // Compile the level's shader off to the side, then show it.
+        await land.addLevel(name, await loader.load(name), async (mesh) => {
+          const staging = new Scene();
+          staging.add(mesh);
+          await renderer.compileAsync(staging, land.camera);
+          staging.remove(mesh);
+        });
         state.levels = land.loadedLevels;
         showKigaliElevation();
         dirty = true;

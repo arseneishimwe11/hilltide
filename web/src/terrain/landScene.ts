@@ -111,17 +111,35 @@ export class LandScene {
     return this.levels.has(name);
   }
 
+  /** Levels that are on screen (a level still warming up is not listed). */
   get loadedLevels(): LevelName[] {
-    return LEVEL_ORDER.filter((name) => this.levels.has(name));
+    return LEVEL_ORDER.filter((name) => this.levels.get(name)?.mesh.parent === this.scene);
   }
 
-  /** Adds a terrain level. Coarser levels must be added before finer ones. */
-  addLevel(name: LevelName, terrain: PreparedTerrain): void {
+  /**
+   * Adds a terrain level. Coarser levels must be added before finer ones.
+   *
+   * `warmUp`, when given, receives the new mesh before it joins the scene,
+   * so its shader can be compiled without holding up a frame mid-scroll.
+   */
+  async addLevel(
+    name: LevelName,
+    terrain: PreparedTerrain,
+    warmUp?: (mesh: THREE.Mesh) => Promise<void>,
+  ): Promise<void> {
     if (this.levels.has(name)) return;
     const level = new TerrainLevel(terrain.grid, terrain.texels);
     const entry = { name, terrain, level } as LoadedLevel;
     this.levels.set(name, entry);
-    this.buildMesh(entry);
+    this.buildMesh(entry, false);
+    if (warmUp !== undefined) {
+      try {
+        await warmUp(entry.mesh);
+      } catch {
+        // Warm-up is an optimisation; the level still appears without it.
+      }
+    }
+    this.scene.add(entry.mesh);
     this.linkLevels();
   }
 
@@ -133,7 +151,7 @@ export class LandScene {
     return null;
   }
 
-  private buildMesh(entry: LoadedLevel): void {
+  private buildMesh(entry: LoadedLevel, show = true): void {
     if (entry.mesh !== undefined) {
       this.scene.remove(entry.mesh);
       entry.mesh.geometry.dispose();
@@ -152,13 +170,15 @@ export class LandScene {
     entry.mesh.frustumCulled = false;
     // Finer levels first: they win the depth test where levels overlap.
     entry.mesh.renderOrder = -LEVEL_ORDER.indexOf(entry.name);
-    this.scene.add(entry.mesh);
+    if (show) this.scene.add(entry.mesh);
   }
 
   /** Tells each level which finer level sits on top of it. */
   private linkLevels(): void {
     for (const entry of this.levels.values()) {
-      const finer = [...this.levels.values()].find((other) => this.parentOf(other.name) === entry);
+      const finer = [...this.levels.values()].find(
+        (other) => other.mesh.parent === this.scene && this.parentOf(other.name) === entry,
+      );
       if (finer === undefined) {
         entry.shader.inner.set(0, 0, 0, 0);
       } else {

@@ -62,7 +62,7 @@ export async function goToProgress(page: Page, progress: number): Promise<void> 
   await page.waitForFunction(
     (value) => {
       const state = window.__hilltide;
-      return state !== undefined && state.settled && Math.abs(state.progress - value) < 0.01;
+      return state?.settled === true && Math.abs(state.progress - value) < 0.01;
     },
     progress,
     { timeout: 180_000 },
