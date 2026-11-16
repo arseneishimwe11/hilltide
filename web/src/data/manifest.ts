@@ -46,15 +46,20 @@ export function assetEntry(manifest: Manifest, key: string): AssetEntry {
   return entry;
 }
 
+export type Fetcher = (url: string) => Promise<Response>;
+
+/** Calls the browser's fetch. (A bare reference to `fetch` cannot be stored and called later.) */
+const browserFetch: Fetcher = (url) => fetch(url);
+
 /** Loads assets relative to the data folder, through the manifest. */
 export class AssetLoader {
   constructor(
     readonly manifest: Manifest,
     private readonly baseUrl: string,
-    private readonly fetcher: typeof fetch = fetch,
+    private readonly fetcher: Fetcher = browserFetch,
   ) {}
 
-  static async open(baseUrl: string, fetcher: typeof fetch = fetch): Promise<AssetLoader> {
+  static async open(baseUrl: string, fetcher: Fetcher = browserFetch): Promise<AssetLoader> {
     const response = await fetcher(`${baseUrl}manifest.json`);
     if (!response.ok) throw new Error(`Could not load the asset manifest (${response.status})`);
     return new AssetLoader(parseManifest(await response.json()), baseUrl, fetcher);

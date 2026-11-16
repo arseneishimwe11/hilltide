@@ -37,16 +37,16 @@ interface Stop {
 const STOPS: readonly Stop[] = [
   {
     elevation: -18,
-    light: [0.11, 0.14, 0.22],
-    ambient: [0.03, 0.04, 0.07],
+    light: [0.2, 0.25, 0.38],
+    ambient: [0.05, 0.065, 0.11],
     haze: [0.02, 0.03, 0.05],
     zenith: [0.005, 0.008, 0.02],
     horizon: [0.02, 0.03, 0.06],
   },
   {
     elevation: -6,
-    light: [0.12, 0.14, 0.24],
-    ambient: [0.05, 0.06, 0.1],
+    light: [0.2, 0.24, 0.38],
+    ambient: [0.06, 0.07, 0.12],
     haze: [0.06, 0.07, 0.12],
     zenith: [0.02, 0.03, 0.08],
     horizon: [0.16, 0.12, 0.16],

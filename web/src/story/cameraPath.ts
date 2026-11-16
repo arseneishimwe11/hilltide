@@ -108,3 +108,15 @@ export function keepAboveGround(
   if (pose.position[2] >= floor) return pose;
   return { position: [pose.position[0], pose.position[1], floor], target: pose.target };
 }
+
+/**
+ * The key time closest to a progress value. With reduced motion the camera
+ * shows these fixed views one after another instead of flying between them.
+ */
+export function nearestKeyTime(keys: readonly CameraKey[], t: number): number {
+  let best = keys[0]?.t ?? 0;
+  for (const key of keys) {
+    if (Math.abs(key.t - t) < Math.abs(best - t)) best = key.t;
+  }
+  return best;
+}

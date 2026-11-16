@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clockTime, KIGALI, solarCoordinates, sunDirection, sunPosition } from "./sun";
+import { clockTime, goldenHour, KIGALI, solarCoordinates, sunDirection, sunPosition } from "./sun";
 
 const utc = (iso: string): Date => new Date(`${iso}Z`);
 
@@ -87,5 +87,19 @@ describe("clock time", () => {
   it("shows Kigali time two hours ahead of UTC", () => {
     expect(clockTime(utc("2026-11-15T21:14:00"), KIGALI.timeZone)).toBe("23:14");
     expect(clockTime(utc("2026-11-15T22:05:00"), KIGALI.timeZone)).toBe("00:05");
+  });
+});
+
+describe("golden hour", () => {
+  it("finds the late-afternoon moment with the sun 9 degrees up, on any day", () => {
+    for (const day of ["2026-01-15", "2026-06-21", "2026-11-16"]) {
+      const moment = goldenHour(utc(`${day}T03:00:00`), KIGALI.latitude, KIGALI.longitude);
+      const position = sunPosition(moment, KIGALI.latitude, KIGALI.longitude);
+      expect(position.elevation).toBeCloseTo(9, 2);
+      expect(position.azimuth).toBeGreaterThan(180); // afternoon: the sun is in the west
+      const time = clockTime(moment, KIGALI.timeZone);
+      expect(time >= "16:45" && time <= "17:45", time).toBe(true);
+      expect(moment.toISOString().slice(0, 10)).toBe(day);
+    }
   });
 });

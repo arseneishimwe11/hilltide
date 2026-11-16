@@ -6,17 +6,17 @@ import { LandClass } from "../data/landcover";
  * built ground, dark lake water. sRGB hex values.
  */
 export const LAND_COLOURS: Readonly<Record<number, number>> = {
-  [LandClass.None]: 0x5a6b52,
-  [LandClass.Trees]: 0x1f4a36,
-  [LandClass.Shrubland]: 0x3f6844,
-  [LandClass.Grassland]: 0x6d8650,
-  [LandClass.Cropland]: 0x86904f,
-  [LandClass.BuiltUp]: 0xa3664a,
-  [LandClass.Bare]: 0xb4623c,
+  [LandClass.None]: 0x5d6f58,
+  [LandClass.Trees]: 0x2a563f,
+  [LandClass.Shrubland]: 0x4a6f4b,
+  [LandClass.Grassland]: 0x6f875a,
+  [LandClass.Cropland]: 0x778a57,
+  [LandClass.BuiltUp]: 0x94705d,
+  [LandClass.Bare]: 0xa9643f,
   [LandClass.Snow]: 0xe8ece6,
-  [LandClass.Water]: 0x14394b,
-  [LandClass.Wetland]: 0x3d6a58,
-  [LandClass.Other]: 0x55705a,
+  [LandClass.Water]: 0x0f3140,
+  [LandClass.Wetland]: 0x416c5a,
+  [LandClass.Other]: 0x587259,
 };
 
 /** Number of entries in the palette texture (class codes 0 to 15). */

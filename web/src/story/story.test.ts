@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { type CameraKey, dampPose, keepAboveGround, poseDistance, samplePath } from "./cameraPath";
+import {
+  type CameraKey,
+  dampPose,
+  keepAboveGround,
+  nearestKeyTime,
+  poseDistance,
+  samplePath,
+} from "./cameraPath";
 import {
   type Chapter,
   chapterAt,
@@ -92,6 +99,16 @@ describe("ground clearance", () => {
     expect(low.position).toEqual([0, 0, 1650]);
     const high = { position: [0, 0, 9000], target: [1, 1, 1500] } as const;
     expect(keepAboveGround(high, ground, 150)).toBe(high);
+  });
+});
+
+describe("reduced motion", () => {
+  it("snaps progress to the nearest fixed view", () => {
+    expect(nearestKeyTime(keys, 0.05)).toBe(0);
+    expect(nearestKeyTime(keys, 0.25)).toBe(0.4);
+    expect(nearestKeyTime(keys, 0.61)).toBe(0.8);
+    expect(nearestKeyTime(keys, 0.95)).toBe(1);
+    expect(nearestKeyTime([], 0.5)).toBe(0);
   });
 });
 

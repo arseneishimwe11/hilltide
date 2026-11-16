@@ -106,3 +106,26 @@ export function clockTime(date: Date, timeZone: string): string {
     hourCycle: "h23",
   }).format(date);
 }
+
+/**
+ * The moment in the afternoon of the given day (UTC date) when the sun
+ * stands `elevation` degrees above the horizon: the warm, long-shadowed
+ * light of golden hour. Found by bisection between solar noon and sunset.
+ */
+export function goldenHour(date: Date, latitude: number, longitude: number, elevation = 9): Date {
+  const midnight = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  const { equationOfTime } = solarCoordinates(new Date(midnight + DAY_MS / 2));
+  // Solar noon in UTC milliseconds since midnight.
+  const noon = midnight + (720 - 4 * longitude - equationOfTime) * 60_000;
+  let high = noon;
+  let low = noon + 7 * 3_600_000; // well after sunset anywhere near the equator
+  if (sunPosition(new Date(high), latitude, longitude).elevation <= elevation) {
+    return new Date(high);
+  }
+  for (let i = 0; i < 40; i++) {
+    const middle = (high + low) / 2;
+    if (sunPosition(new Date(middle), latitude, longitude).elevation > elevation) high = middle;
+    else low = middle;
+  }
+  return new Date((high + low) / 2);
+}

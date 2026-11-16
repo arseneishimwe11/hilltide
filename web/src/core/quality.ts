@@ -31,9 +31,9 @@ export const TIERS: Readonly<Record<Tier, QualitySettings>> = {
 
 export interface DeviceHints {
   /** navigator.deviceMemory in GB, when the browser reports it. */
-  readonly memoryGb?: number;
+  readonly memoryGb?: number | undefined;
   /** navigator.hardwareConcurrency. */
-  readonly cores?: number;
+  readonly cores?: number | undefined;
   readonly isMobile: boolean;
   /** True when the GPU is a software renderer (as in headless tests). */
   readonly softwareRenderer: boolean;
