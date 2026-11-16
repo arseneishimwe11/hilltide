@@ -301,6 +301,7 @@ percentile shows. Real-device measurements: none yet (Needs owner 6).
 | Browser tests | 31 passing, 5 skipped on the phone viewport (viewport-independent logic runs on desktop only) |
 | JavaScript bundle | 0.87 MB (0.24 MB gzipped) |
 | Data before the first frame | 1.59 MB (unchanged; buildings load later) |
+| CI with the full browser suite | 11 min 28 s on GitHub's runners (run 21, green) |
 | Building data | 7.92 MB, loaded in the background |
 | On-screen figures | Equal to `buildings/stats.json` at 2016 and 2023 (tested) |
 | Fixed view, 2016 to 2023 | 2.8% of scene pixels change on desktop, 6.1% on phone; returning to 2016 changes 0.00% |
